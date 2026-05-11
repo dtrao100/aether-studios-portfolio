@@ -7,7 +7,30 @@ import { CATEGORIES, DEFAULT_CATEGORY_INDEX } from "@/content/categories";
 
 type Direction = "up" | "down" | "left" | "right";
 
-const TRANSITION_GUARD_MS = 220;
+/**
+ * Ramping-scroll constants (ms per advance).
+ * First press is immediate. Then after `HOLD_DELAY`, we begin auto-advancing
+ * at `SLOW_INTERVAL`. After `RAMP_AFTER` ticks the interval shrinks to `FAST_INTERVAL`.
+ */
+const HOLD_DELAY = 320;
+const SLOW_INTERVAL = 180;
+const FAST_INTERVAL = 90;
+const RAMP_AFTER = 4;
+
+const KEY_TO_DIRECTION: Record<string, Direction | undefined> = {
+  ArrowLeft: "left",
+  ArrowRight: "right",
+  ArrowUp: "up",
+  ArrowDown: "down",
+  a: "left",
+  A: "left",
+  d: "right",
+  D: "right",
+  w: "up",
+  W: "up",
+  s: "down",
+  S: "down",
+};
 
 export type UseXMBNavOptions = {
   initialCursor?: CursorState;
@@ -21,94 +44,125 @@ export function useXMBNav(opts: UseXMBNavOptions = {}) {
     opts.initialCursor ?? { categoryIndex: DEFAULT_CATEGORY_INDEX, itemIndex: 0 }
   );
   const [mode] = useState<XMBMode>(opts.mode ?? "xmb");
-  const transitioningRef = useRef<{ h: boolean; v: boolean }>({ h: false, v: false });
 
-  const guard = useCallback((axis: "h" | "v") => {
-    if (transitioningRef.current[axis]) return false;
-    transitioningRef.current[axis] = true;
-    setTimeout(() => {
-      transitioningRef.current[axis] = false;
-    }, TRANSITION_GUARD_MS);
-    return true;
+  // refs we can read inside event handlers without re-binding
+  const cursorRef = useRef(cursor);
+  useEffect(() => {
+    cursorRef.current = cursor;
+  }, [cursor]);
+
+  const holdTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const repeatIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const activeKeyRef = useRef<string | null>(null);
+  const tickCountRef = useRef(0);
+
+  const stepCursor = useCallback((dir: Direction) => {
+    setCursor((prev) => {
+      const cat = CATEGORIES[prev.categoryIndex];
+      if (!cat) return prev;
+      if (dir === "left") {
+        if (prev.categoryIndex <= 0) return prev;
+        return { categoryIndex: prev.categoryIndex - 1, itemIndex: 0 };
+      }
+      if (dir === "right") {
+        if (prev.categoryIndex >= CATEGORIES.length - 1) return prev;
+        return { categoryIndex: prev.categoryIndex + 1, itemIndex: 0 };
+      }
+      if (dir === "up") {
+        if (prev.itemIndex <= 0) return prev;
+        return { ...prev, itemIndex: prev.itemIndex - 1 };
+      }
+      if (dir === "down") {
+        if (prev.itemIndex >= cat.items.length - 1) return prev;
+        return { ...prev, itemIndex: prev.itemIndex + 1 };
+      }
+      return prev;
+    });
   }, []);
 
-  const navigate = useCallback(
-    (dir: Direction) => {
-      setCursor((prev) => {
-        const cat = CATEGORIES[prev.categoryIndex];
-        if (!cat) return prev;
-        if (dir === "left") {
-          if (!guard("h")) return prev;
-          if (prev.categoryIndex <= 0) return prev;
-          return { categoryIndex: prev.categoryIndex - 1, itemIndex: 0 };
-        }
-        if (dir === "right") {
-          if (!guard("h")) return prev;
-          if (prev.categoryIndex >= CATEGORIES.length - 1) return prev;
-          return { categoryIndex: prev.categoryIndex + 1, itemIndex: 0 };
-        }
-        if (dir === "up") {
-          if (!guard("v")) return prev;
-          if (prev.itemIndex <= 0) return prev;
-          return { ...prev, itemIndex: prev.itemIndex - 1 };
-        }
-        if (dir === "down") {
-          if (!guard("v")) return prev;
-          if (prev.itemIndex >= cat.items.length - 1) return prev;
-          return { ...prev, itemIndex: prev.itemIndex + 1 };
-        }
-        return prev;
-      });
-    },
-    [guard]
-  );
+  const stopHold = useCallback(() => {
+    if (holdTimerRef.current) {
+      clearTimeout(holdTimerRef.current);
+      holdTimerRef.current = null;
+    }
+    if (repeatIntervalRef.current) {
+      clearInterval(repeatIntervalRef.current);
+      repeatIntervalRef.current = null;
+    }
+    activeKeyRef.current = null;
+    tickCountRef.current = 0;
+  }, []);
 
   const enter = useCallback(() => {
-    const cat = CATEGORIES[cursor.categoryIndex];
-    const item = cat?.items[cursor.itemIndex];
+    const c = cursorRef.current;
+    const cat = CATEGORIES[c.categoryIndex];
+    const item = cat?.items[c.itemIndex];
     if (item?.href && item.status !== "disabled") {
       router.push(item.href);
     }
-  }, [cursor, router]);
+  }, [router]);
 
   useEffect(() => {
     if (mode !== "xmb") return;
-    const onKey = (e: KeyboardEvent) => {
-      switch (e.key) {
-        case "ArrowLeft":
-        case "a":
-        case "A":
-          e.preventDefault();
-          navigate("left");
-          break;
-        case "ArrowRight":
-        case "d":
-        case "D":
-          e.preventDefault();
-          navigate("right");
-          break;
-        case "ArrowUp":
-        case "w":
-        case "W":
-          e.preventDefault();
-          navigate("up");
-          break;
-        case "ArrowDown":
-        case "s":
-        case "S":
-          e.preventDefault();
-          navigate("down");
-          break;
-        case "Enter":
-        case " ":
-          e.preventDefault();
-          enter();
-          break;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      // ignore OS key-repeat — we manage repeat ourselves
+      if (e.repeat) {
+        e.preventDefault();
+        return;
+      }
+
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        enter();
+        return;
+      }
+
+      const dir = KEY_TO_DIRECTION[e.key];
+      if (!dir) return;
+
+      e.preventDefault();
+
+      // first press: navigate immediately
+      stopHold();
+      activeKeyRef.current = e.key;
+      stepCursor(dir);
+
+      // schedule the ramp: after HOLD_DELAY, start auto-advancing
+      // (we don't stop at boundary — cursor naturally clamps; interval ends on keyup)
+      holdTimerRef.current = setTimeout(() => {
+        repeatIntervalRef.current = setInterval(() => {
+          tickCountRef.current += 1;
+          stepCursor(dir);
+          // ramp to faster interval after RAMP_AFTER slow ticks
+          if (tickCountRef.current === RAMP_AFTER && repeatIntervalRef.current) {
+            clearInterval(repeatIntervalRef.current);
+            repeatIntervalRef.current = setInterval(() => {
+              stepCursor(dir);
+            }, FAST_INTERVAL);
+          }
+        }, SLOW_INTERVAL);
+      }, HOLD_DELAY);
+    };
+
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.key === activeKeyRef.current) {
+        stopHold();
       }
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [navigate, enter, mode]);
+
+    const onBlur = () => stopHold();
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+    window.addEventListener("blur", onBlur);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("keyup", onKeyUp);
+      window.removeEventListener("blur", onBlur);
+      stopHold();
+    };
+  }, [mode, enter, stepCursor, stopHold]);
 
   const setCursorTo = useCallback((next: CursorState) => {
     setCursor(next);
@@ -116,7 +170,6 @@ export function useXMBNav(opts: UseXMBNavOptions = {}) {
 
   return {
     cursor,
-    navigate,
     enter,
     setCursor: setCursorTo,
     categories: CATEGORIES,

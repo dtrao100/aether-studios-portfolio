@@ -26,6 +26,7 @@ export function XMB() {
       <div className={styles.categoryViewport}>
         <motion.div
           className={styles.categoryTrack}
+          initial={{ x: categoryX }}
           animate={{ x: categoryX }}
           transition={spring}
         >
@@ -56,6 +57,7 @@ export function XMB() {
       <div className={styles.itemViewport}>
         <motion.div
           className={styles.itemTrack}
+          initial={{ y: itemY }}
           animate={{ y: itemY }}
           transition={spring}
         >
