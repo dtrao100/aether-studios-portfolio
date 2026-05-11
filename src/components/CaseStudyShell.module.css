@@ -1,0 +1,108 @@
+.layout {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100vh;
+  color: #f5f5f5;
+  font-family: "SCE-PS3 Rodin LATIN Regular", -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow: hidden;
+}
+
+.main {
+  position: absolute;
+  left: 38%;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  padding: 88px 64px 120px;
+  overflow-y: auto;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.45) 0%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+  backdrop-filter: blur(2px);
+}
+
+@media (max-width: 1100px) {
+  .main {
+    padding: 88px 40px 96px;
+  }
+}
+
+.content {
+  max-width: 720px;
+}
+
+.meta {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin-bottom: 18px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.title {
+  font-size: 56px;
+  line-height: 1.04;
+  letter-spacing: -0.5px;
+  margin: 0 0 18px;
+  font-weight: 400;
+}
+
+.lede {
+  font-size: 20px;
+  line-height: 1.4;
+  opacity: 0.85;
+  margin: 0 0 44px;
+  font-weight: 300;
+  max-width: 620px;
+}
+
+.hero {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background:
+    linear-gradient(135deg, rgba(120, 120, 120, 0.18), rgba(40, 40, 40, 0.18)),
+    repeating-linear-gradient(45deg, transparent 0 16px, rgba(255, 255, 255, 0.02) 16px 32px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+}
+
+.section {
+  margin-bottom: 38px;
+}
+
+.section h3 {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin: 0 0 14px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+}
+
+.section p {
+  font-size: 17px;
+  line-height: 1.65;
+  margin: 0 0 18px;
+  opacity: 0.88;
+  font-weight: 300;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.section strong {
+  color: white;
+  opacity: 1;
+  font-weight: 500;
+}

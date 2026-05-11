@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Aether Studios — Portfolio (XMB)
 
-## Getting Started
+A portfolio site for [Aether Studios](https://aether.studio) that recreates the PlayStation 3 Cross Media Bar (XMB) as its navigation metaphor. Built as v1 application material for a Founding Product Designer role at FurtherAI.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, Turbopack)
+- **TypeScript**, **Tailwind v4** (CSS-based config)
+- **Framer Motion** for category/item sliding
+- **WebGL** fragment shader for the wave background (adapted from [fchavonet/creative_coding-xmb_wave_background](https://github.com/fchavonet/creative_coding-xmb_wave_background))
+- **MDX** ready for case study content (v1 ships placeholders)
+
+## Local dev
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # http://localhost:3000 (or 3201 via .claude/launch.json)
+npm run build
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Content workflow
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+All categories and items live in **one file**: [`src/content/categories.ts`](src/content/categories.ts).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To **add a case study**:
+1. Add an entry to the `case-studies` category in `categories.ts` with `href: "/case-studies/your-slug"`
+2. The route `/case-studies/[slug]` picks it up automatically — the placeholder shell renders title/meta/lede + Problem/Approach/Outcome scaffolding
+3. (v2) Drop an MDX file at `src/content/case-studies/<slug>.mdx` and import it from the route
 
-## Learn More
+To **change the active default category**: edit `DEFAULT_CATEGORY_INDEX` at the bottom of `categories.ts`.
 
-To learn more about Next.js, take a look at the following resources:
+To **swap icons**: PS3 icons live at `public/icons/Icons.N.png` (59 cherry-picked from the Mr. Billionaire pack). Reference them in `categories.ts` by path.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Drill-in pattern
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Case studies use **Option A — Side Rail**: XMB collapses to a vertical left rail (38% width, sibling case studies stacked, active item glows), case study fills the right pane (62%). Wave continues behind both. `Esc` returns to XMB, `↑/↓` switches siblings without leaving drill-in.
 
-## Deploy on Vercel
+Other categories (Settings, About, Projects, Writing) will follow the same shell. Music / Games / Photos are leaf-content categories.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Attribution
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **PS3 XMB Icons Pack** by Mr. Billionaire, CC BY-NC-ND 3.0. Icons © Sony Computer Entertainment, used non-commercially. Pack borrowed via [mustafaHTP/ps3-xmb-menu](https://github.com/mustafaHTP/ps3-xmb-menu).
+- **SCE-PS3 Rodin Latin font** loaded from `onlinewebfonts.com` CDN. v2 will self-host or AI-recreate the glyphs.
+- **Wave shader** adapted from [fchavonet/creative_coding-xmb_wave_background](https://github.com/fchavonet/creative_coding-xmb_wave_background).
+
+## v1 status (scaffold)
+
+- [x] Next.js + TS + Tailwind v4 + Framer Motion
+- [x] 8 categories navigable (keyboard + mouse)
+- [x] WebGL wave background rendering with `prefers-reduced-motion` support
+- [x] Grey theme (gradient body + translucent wave ribbons)
+- [x] Case Studies default-selected
+- [x] Side-rail drill-in for case studies (Complify / ServiceNow / SafetyWing all wired)
+- [x] HUD: clock (top-right), pill-shaped key-hint bar (bottom)
+- [ ] Real Complify / ServiceNow / SafetyWing content (MDX)
+- [ ] Settings, About, Projects, Writing drill-in pages
+- [ ] Vercel deployment
+
+## Deploy
+
+```bash
+# After connecting a GitHub remote:
+gh repo create aether-studios-portfolio --public --source=. --push
+# Then connect on Vercel: https://vercel.com/new
+```
