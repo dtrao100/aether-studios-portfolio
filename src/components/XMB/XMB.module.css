@@ -9,6 +9,22 @@
   user-select: none;
 }
 
+/* PS3-style soft load-in: shell + items fade in shortly after mount */
+.containerFadeIn {
+  animation: xmb-load-in 800ms cubic-bezier(0.22, 0.61, 0.36, 1) 180ms both;
+}
+
+@keyframes xmb-load-in {
+  0% {
+    opacity: 0;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
 /* horizontal category bar slides */
 .categoryViewport {
   position: absolute;
@@ -78,15 +94,32 @@
   font-size: 17px;
 }
 
-/* vertical items column for active category — sits BELOW the category bar */
+/* vertical items column for active category — items pass through/above the category bar */
 .itemViewport {
   position: absolute;
-  top: 42vh;
+  top: 22vh;
   left: 28%;
   right: 32px;
-  height: 50vh;
+  height: 70vh;
   overflow: hidden;
   pointer-events: none;
+  /* mask: fade items out as they cross above the category bar zone (top ~20vh) */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0) 22%,
+    rgba(0, 0, 0, 0.4) 26%,
+    rgba(0, 0, 0, 0.95) 30%,
+    rgba(0, 0, 0, 1) 33%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0) 22%,
+    rgba(0, 0, 0, 0.4) 26%,
+    rgba(0, 0, 0, 0.95) 30%,
+    rgba(0, 0, 0, 1) 33%
+  );
 }
 
 .itemTrack {
@@ -98,6 +131,8 @@
   flex-direction: column;
   gap: 18px;
   will-change: transform;
+  /* anchor first item at the "active row" position — vertically below the category bar */
+  padding-top: 20vh;
 }
 
 .item {

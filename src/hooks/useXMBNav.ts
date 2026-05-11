@@ -56,28 +56,44 @@ export function useXMBNav(opts: UseXMBNavOptions = {}) {
   const activeKeyRef = useRef<string | null>(null);
   const tickCountRef = useRef(0);
 
+  // overscroll: which axis is "pushing" past the boundary, and in which direction
+  const [overscroll, setOverscroll] = useState<{ axis: "h" | "v"; dir: 1 | -1 } | null>(null);
+
   const stepCursor = useCallback((dir: Direction) => {
-    setCursor((prev) => {
-      const cat = CATEGORIES[prev.categoryIndex];
-      if (!cat) return prev;
-      if (dir === "left") {
-        if (prev.categoryIndex <= 0) return prev;
-        return { categoryIndex: prev.categoryIndex - 1, itemIndex: 0 };
+    // read boundary status from current cursor via ref (avoids stale closure)
+    const current = cursorRef.current;
+    const cat = CATEGORIES[current.categoryIndex];
+    if (!cat) return;
+
+    if (dir === "left") {
+      if (current.categoryIndex <= 0) {
+        setOverscroll({ axis: "h", dir: -1 });
+        return;
       }
-      if (dir === "right") {
-        if (prev.categoryIndex >= CATEGORIES.length - 1) return prev;
-        return { categoryIndex: prev.categoryIndex + 1, itemIndex: 0 };
+      setOverscroll(null);
+      setCursor({ categoryIndex: current.categoryIndex - 1, itemIndex: 0 });
+    } else if (dir === "right") {
+      if (current.categoryIndex >= CATEGORIES.length - 1) {
+        setOverscroll({ axis: "h", dir: 1 });
+        return;
       }
-      if (dir === "up") {
-        if (prev.itemIndex <= 0) return prev;
-        return { ...prev, itemIndex: prev.itemIndex - 1 };
+      setOverscroll(null);
+      setCursor({ categoryIndex: current.categoryIndex + 1, itemIndex: 0 });
+    } else if (dir === "up") {
+      if (current.itemIndex <= 0) {
+        setOverscroll({ axis: "v", dir: -1 });
+        return;
       }
-      if (dir === "down") {
-        if (prev.itemIndex >= cat.items.length - 1) return prev;
-        return { ...prev, itemIndex: prev.itemIndex + 1 };
+      setOverscroll(null);
+      setCursor({ ...current, itemIndex: current.itemIndex - 1 });
+    } else if (dir === "down") {
+      if (current.itemIndex >= cat.items.length - 1) {
+        setOverscroll({ axis: "v", dir: 1 });
+        return;
       }
-      return prev;
-    });
+      setOverscroll(null);
+      setCursor({ ...current, itemIndex: current.itemIndex + 1 });
+    }
   }, []);
 
   const stopHold = useCallback(() => {
@@ -148,10 +164,14 @@ export function useXMBNav(opts: UseXMBNavOptions = {}) {
     const onKeyUp = (e: KeyboardEvent) => {
       if (e.key === activeKeyRef.current) {
         stopHold();
+        setOverscroll(null);
       }
     };
 
-    const onBlur = () => stopHold();
+    const onBlur = () => {
+      stopHold();
+      setOverscroll(null);
+    };
 
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("keyup", onKeyUp);
@@ -170,6 +190,7 @@ export function useXMBNav(opts: UseXMBNavOptions = {}) {
 
   return {
     cursor,
+    overscroll,
     enter,
     setCursor: setCursorTo,
     categories: CATEGORIES,

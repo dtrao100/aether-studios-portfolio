@@ -8,17 +8,22 @@ import styles from "./XMB.module.css";
 
 const CATEGORY_GAP = 170;
 const ITEM_GAP = 98;
+const OVERSCROLL_PX = 18; // how far the track stretches when pushed past a boundary
 
 const spring = { type: "spring" as const, stiffness: 220, damping: 26, mass: 0.9 };
+const bounceSpring = { type: "spring" as const, stiffness: 360, damping: 22, mass: 0.7 };
 
 export function XMB() {
-  const { cursor, categories, setCursor, enter } = useXMBNav();
+  const { cursor, categories, setCursor, enter, overscroll } = useXMBNav();
 
   const activeCategory = categories[cursor.categoryIndex];
   const items = activeCategory?.items ?? [];
 
-  const categoryX = -cursor.categoryIndex * CATEGORY_GAP;
-  const itemY = -cursor.itemIndex * ITEM_GAP;
+  const overscrollH = overscroll?.axis === "h" ? -overscroll.dir * OVERSCROLL_PX : 0;
+  const overscrollV = overscroll?.axis === "v" ? -overscroll.dir * OVERSCROLL_PX : 0;
+
+  const categoryX = -cursor.categoryIndex * CATEGORY_GAP + overscrollH;
+  const itemY = -cursor.itemIndex * ITEM_GAP + overscrollV;
 
   return (
     <div className={styles.container}>
@@ -26,9 +31,9 @@ export function XMB() {
       <div className={styles.categoryViewport}>
         <motion.div
           className={styles.categoryTrack}
-          initial={{ x: categoryX }}
+          initial={{ x: -cursor.categoryIndex * CATEGORY_GAP }}
           animate={{ x: categoryX }}
-          transition={spring}
+          transition={overscroll?.axis === "h" ? bounceSpring : spring}
         >
           {categories.map((cat, i) => {
             const isActive = i === cursor.categoryIndex;
@@ -53,13 +58,13 @@ export function XMB() {
         </motion.div>
       </div>
 
-      {/* vertical items column for active category */}
+      {/* vertical items column — items pass through/above the category bar with a soft fade */}
       <div className={styles.itemViewport}>
         <motion.div
           className={styles.itemTrack}
-          initial={{ y: itemY }}
+          initial={{ y: -cursor.itemIndex * ITEM_GAP }}
           animate={{ y: itemY }}
-          transition={spring}
+          transition={overscroll?.axis === "v" ? bounceSpring : spring}
         >
           {items.map((item, i) => {
             const isActive = i === cursor.itemIndex;
