@@ -7,6 +7,7 @@ export const FRAGMENT_SHADER = /* glsl */ `
   precision highp float;
   uniform float uTime;
   uniform vec2 uResolution;
+  uniform vec3 uTint;
   const float waveWidthFactor = 1.5;
 
   vec3 calcSine(vec2 uv, float speed, float frequency, float amplitude,
@@ -28,7 +29,7 @@ export const FRAGMENT_SHADER = /* glsl */ `
 
   void main() {
     vec2 uv = gl_FragCoord.xy / uResolution;
-    vec3 base = vec3(0.55);
+    vec3 base = uTint;
     vec3 c = vec3(0.0);
     c += calcSine(uv, 0.2, 0.20, 0.20, 0.0, 0.5, base, 0.10, 15.0, false);
     c += calcSine(uv, 0.4, 0.40, 0.15, 0.0, 0.5, base, 0.10, 17.0, false);

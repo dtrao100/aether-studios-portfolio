@@ -7,7 +7,7 @@ export const CATEGORIES: Category[] = [
     icon: "/icons/Icons.35.png",
     items: [
       { id: "display", title: "Display Settings", subtitle: "Reduced motion, theme", icon: "/icons/Icons.26.png", kind: "setting", href: "/settings/display" },
-      { id: "theme", title: "Theme Settings", subtitle: "Original Gray (Active)", icon: "/icons/Icons.36.png", kind: "setting", href: "/settings/theme" },
+      { id: "theme", title: "Theme Settings", subtitle: "5 PS3 hues, auto-drift default", icon: "/icons/Icons.36.png", kind: "setting", href: "/settings/theme" },
       { id: "sound", title: "Sound Settings", subtitle: "Authentic PS3 audio, opt-in", icon: "/icons/Icons.34.png", kind: "setting", href: "/settings/sound" },
       { id: "connect", title: "Connect", subtitle: "LinkedIn / Email / GitHub", icon: "/icons/Icons.18.png", kind: "setting", href: "/settings/connect" },
       { id: "about-system", title: "About this System", subtitle: "Credits, attributions, build info", icon: "/icons/Icons.40.png", kind: "setting", href: "/settings/about-system" },

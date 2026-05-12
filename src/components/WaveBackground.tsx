@@ -3,11 +3,13 @@
 import { useEffect, useRef } from "react";
 import { FRAGMENT_SHADER, VERTEX_SHADER } from "@/lib/shader";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { computeTint, getActiveTheme, type ThemeId } from "@/lib/theme";
 
 export function WaveBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const reducedMotion = useReducedMotion();
   const reducedRef = useRef(reducedMotion);
+  const themeRef = useRef<ThemeId>("drift");
 
   useEffect(() => {
     reducedRef.current = reducedMotion;
@@ -66,6 +68,15 @@ export function WaveBackground() {
     const posLoc = gl.getAttribLocation(program, "aPos");
     const uTime = gl.getUniformLocation(program, "uTime");
     const uRes = gl.getUniformLocation(program, "uResolution");
+    const uTint = gl.getUniformLocation(program, "uTint");
+
+    // hydrate theme from localStorage, listen for changes
+    themeRef.current = getActiveTheme();
+    const onThemeChange = (e: Event) => {
+      const detail = (e as CustomEvent<ThemeId>).detail;
+      if (detail) themeRef.current = detail;
+    };
+    window.addEventListener("aether-theme-change", onThemeChange);
 
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
@@ -84,21 +95,25 @@ export function WaveBackground() {
 
     const frame = (t: number) => {
       const isReduced = reducedRef.current;
+      const sec = t * 0.001;
+      const [r, g, b] = computeTint(themeRef.current, isReduced ? frozenT : sec);
       if (isReduced) {
         if (!renderedFrozenFrame) {
           gl.clear(gl.COLOR_BUFFER_BIT);
           gl.uniform1f(uTime, frozenT);
           gl.uniform2f(uRes, canvas.width, canvas.height);
+          gl.uniform3f(uTint, r, g, b);
           gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
           renderedFrozenFrame = true;
         }
       } else {
         renderedFrozenFrame = false;
         gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.uniform1f(uTime, t * 0.001);
+        gl.uniform1f(uTime, sec);
         gl.uniform2f(uRes, canvas.width, canvas.height);
+        gl.uniform3f(uTint, r, g, b);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-        frozenT = t * 0.001;
+        frozenT = sec;
       }
       raf = requestAnimationFrame(frame);
     };
@@ -107,6 +122,7 @@ export function WaveBackground() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      window.removeEventListener("aether-theme-change", onThemeChange);
       gl.deleteProgram(program);
       gl.deleteShader(vs);
       gl.deleteShader(fs);

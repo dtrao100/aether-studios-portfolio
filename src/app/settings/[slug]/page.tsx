@@ -4,6 +4,7 @@ import { WaveBackground } from "@/components/WaveBackground";
 import { Sparkles } from "@/components/Sparkles";
 import { SettingsShell } from "@/components/SettingsShell";
 import { SoundSettings } from "@/components/SoundSettings";
+import { ThemePicker } from "@/components/ThemePicker";
 
 type Params = { slug: string };
 
@@ -36,7 +37,7 @@ function Content({ slug }: { slug: string }) {
     case "display":
       return <Display />;
     case "theme":
-      return <Theme />;
+      return <ThemePicker />;
     case "sound":
       return <SoundSettings />;
     case "connect":
