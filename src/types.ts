@@ -5,6 +5,8 @@ export type Item = {
   title: string;
   subtitle?: string;
   meta?: string;
+  /** Short blurb that reveals next to the item when it is active. */
+  description?: string;
   icon: string;
   kind: ItemKind;
   href?: string;

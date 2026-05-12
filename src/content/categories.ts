@@ -6,11 +6,11 @@ export const CATEGORIES: Category[] = [
     title: "Settings",
     icon: "/icons/Icons.35.png",
     items: [
-      { id: "display", title: "Display Settings", subtitle: "Reduced motion, theme", icon: "/icons/Icons.26.png", kind: "setting", href: "/settings/display" },
-      { id: "theme", title: "Theme Settings", subtitle: "5 PS3 hues, auto-drift default", icon: "/icons/Icons.36.png", kind: "setting", href: "/settings/theme" },
-      { id: "sound", title: "Sound Settings", subtitle: "Authentic PS3 audio, opt-in", icon: "/icons/Icons.34.png", kind: "setting", href: "/settings/sound" },
-      { id: "connect", title: "Connect", subtitle: "LinkedIn / Email / GitHub", icon: "/icons/Icons.18.png", kind: "setting", href: "/settings/connect" },
-      { id: "about-system", title: "About this System", subtitle: "Credits, attributions, build info", icon: "/icons/Icons.40.png", kind: "setting", href: "/settings/about-system" },
+      { id: "display", title: "Display Settings", subtitle: "Reduced motion, theme", description: "Respect prefers-reduced-motion. Wave freezes, transitions cut to instant.", icon: "/icons/Icons.26.png", kind: "setting", href: "/settings/display" },
+      { id: "theme", title: "Theme Settings", subtitle: "5 PS3 hues, auto-drift default", description: "Click a theme to apply instantly. Auto drift cycles through all five every 90 seconds.", icon: "/icons/Icons.36.png", kind: "setting", href: "/settings/theme" },
+      { id: "sound", title: "Sound Settings", subtitle: "Authentic PS3 audio, opt-in", description: "Real PS3 system sounds, sourced from OSGameWare. Off by default. BGM and FX toggle independently.", icon: "/icons/Icons.34.png", kind: "setting", href: "/settings/sound" },
+      { id: "connect", title: "Connect", subtitle: "LinkedIn / Email / GitHub", description: "Quick links to reach out or follow the work.", icon: "/icons/Icons.18.png", kind: "setting", href: "/settings/connect" },
+      { id: "about-system", title: "About this System", subtitle: "Credits, attributions, build info", description: "Tech stack, asset sources, and the story behind this PS3 XMB tribute.", icon: "/icons/Icons.40.png", kind: "setting", href: "/settings/about-system" },
     ],
   },
   {
@@ -18,9 +18,9 @@ export const CATEGORIES: Category[] = [
     title: "About",
     icon: "/icons/Icons.9.png",
     items: [
-      { id: "bio", title: "Bio", subtitle: "Who I am, what I do", icon: "/icons/Icons.9.png", kind: "about-section", href: "/about/bio" },
-      { id: "philosophy", title: "Design Philosophy", subtitle: "How I think about the work", icon: "/icons/Icons.40.png", kind: "about-section", href: "/about/philosophy" },
-      { id: "contact", title: "Contact", subtitle: "Email, calendar, socials", icon: "/icons/Icons.18.png", kind: "about-section", href: "/about/contact" },
+      { id: "bio", title: "Bio", subtitle: "Who I am, what I do", description: "Product designer in the Bay Area. Compliance UX at Complify, enterprise workflows at ServiceNow, nomad health at SafetyWing. UCSD HCI grad.", icon: "/icons/Icons.9.png", kind: "about-section", href: "/about/bio" },
+      { id: "philosophy", title: "Design Philosophy", subtitle: "How I think about the work", description: "Three rules: translate the regulator's language, ship the system not the screen, sequential beats configurable.", icon: "/icons/Icons.40.png", kind: "about-section", href: "/about/philosophy" },
+      { id: "contact", title: "Contact", subtitle: "Email, calendar, socials", description: "Best reached by email. Responds within a business day. Available for contract and full-time.", icon: "/icons/Icons.18.png", kind: "about-section", href: "/about/contact" },
     ],
   },
   {
@@ -28,9 +28,9 @@ export const CATEGORIES: Category[] = [
     title: "Case Studies",
     icon: "/icons/Icons.8.png",
     items: [
-      { id: "complify", title: "Complify", subtitle: "Compliance UX · 2025", meta: "User Access Reviews for audit firms", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/complify", status: "live" },
-      { id: "servicenow", title: "ServiceNow", subtitle: "Enterprise · 2024", meta: "Workflow design at scale", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/servicenow", status: "live" },
-      { id: "safetywing", title: "SafetyWing", subtitle: "Insurance · 2023 · write-up in progress", meta: "Nomad-first health coverage", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/safetywing", status: "coming-soon" },
+      { id: "complify", title: "Complify", subtitle: "Compliance UX · 2025", meta: "User Access Reviews for audit firms", description: "Redesigned the end-to-end UAR workflow from blank state to completed review. Solo product designer on a tight scope-to-ship cycle.", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/complify", status: "live" },
+      { id: "servicenow", title: "ServiceNow", subtitle: "Enterprise · 2024", meta: "Workflow design at scale", description: "Workflow patterns for enterprise teams managing complex approvals. Component-driven design at platform scale.", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/servicenow", status: "live" },
+      { id: "safetywing", title: "SafetyWing", subtitle: "Insurance · 2023 · write-up in progress", meta: "Nomad-first health coverage", description: "Health insurance UX for digital nomads. Coverage selection without insurance jargon. Write-up coming v2.", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/safetywing", status: "coming-soon" },
     ],
   },
   {
