@@ -21,6 +21,13 @@ export type Collaborator = {
   name: string;
 };
 
+export type LongSection = {
+  heading: string;
+  body?: string;
+  bullets?: string[];
+  quote?: { text: string; attribution: string };
+};
+
 export type CaseStudy = {
   slug: string;
   title: string;
@@ -40,6 +47,10 @@ export type CaseStudy = {
 
   /** Optional expanded narrative behind a "Read more" toggle. Newline-separated paragraphs. */
   longNarrative?: string;
+
+  /** Preferred structured form of the long-form expansion: headings + body / bullets / quote
+   *  per section. Renders more scannable than a wall of paragraphs. */
+  longSections?: LongSection[];
 
   collaborators?: Collaborator[];
 

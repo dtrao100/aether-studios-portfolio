@@ -129,8 +129,8 @@ function ShortNarrative({ study }: { study: CaseStudy }) {
 
 function ReadMore({ study }: { study: CaseStudy }) {
   const [open, setOpen] = useState(false);
-  if (!study.longNarrative) return null;
-  const paragraphs = study.longNarrative.split(/\n\s*\n/);
+  const hasContent = !!study.longSections?.length || !!study.longNarrative;
+  if (!hasContent) return null;
   return (
     <div className={styles.readMore}>
       <button
@@ -143,9 +143,31 @@ function ReadMore({ study }: { study: CaseStudy }) {
       </button>
       {open && (
         <div className={styles.readMoreBody}>
-          {paragraphs.map((p, i) => (
-            <p key={i}>{p}</p>
+          {study.longSections?.map((section, i) => (
+            <section key={i} className={styles.longSection}>
+              <h4 className={styles.longHeading}>{section.heading}</h4>
+              {section.body && <p className={styles.longBody}>{section.body}</p>}
+              {section.bullets && (
+                <ul className={styles.longBullets}>
+                  {section.bullets.map((b, j) => (
+                    <li key={j}>{b}</li>
+                  ))}
+                </ul>
+              )}
+              {section.quote && (
+                <blockquote className={styles.longQuote}>
+                  <p>“{section.quote.text}”</p>
+                  <cite>{section.quote.attribution}</cite>
+                </blockquote>
+              )}
+            </section>
           ))}
+          {!study.longSections && study.longNarrative &&
+            study.longNarrative.split(/\n\s*\n/).map((p, i) => (
+              <p key={i} className={styles.longBody}>
+                {p}
+              </p>
+            ))}
         </div>
       )}
     </div>
@@ -206,7 +228,7 @@ function Footer({ study }: { study: CaseStudy }) {
             {study.externalLink.label} ↗
           </a>
         )}
-        <a href="mailto:hello@aether.studio" className={styles.footerLink}>
+        <a href="mailto:dtrao100@gmail.com" className={styles.footerLink}>
           Contact ↗
         </a>
       </div>

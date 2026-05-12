@@ -49,11 +49,32 @@ export const servicenow: CaseStudy = {
   shortNarrative:
     "Built case-level + global notepads that live inside the Agent Workspace. Sensitive customer data stopped leaving the platform. Shipped to 8,000+ monthly agents across Starbucks, Spectrum, Disney, Jack in the Box, and Zillow.",
 
-  longNarrative: `ServiceNow's interface relied on rigid, structured fields. When agent-captured information didn't fit predefined schemas, agents resorted to sticky notes and Notepad.exe. Sensitive customer data lived outside the platform.
-
-The fix was a case-level notepad and a global agent-level notepad, both inside the workspace. Accessible without interrupting task flow, fully contained within the secure environment, with AI support for case summaries and knowledge base surfacing.
-
-15 user testing sessions over 3 months, ~20 iterations, agents from Starbucks, Spectrum, Disney, Jack in the Box, and Zillow. I led this end-to-end as the only designer after the team lead stepped back early in the engagement.`,
+  longSections: [
+    {
+      heading: "Problem",
+      body:
+        "ServiceNow's interface relied on rigid, structured fields. When agent-captured information didn't fit predefined schemas, agents resorted to sticky notes and Notepad.exe. Sensitive customer data lived outside the platform.",
+    },
+    {
+      heading: "What I shipped",
+      bullets: [
+        "Case-level notepad tied to the active customer issue",
+        "Global agent-level notepad persisting across cases",
+        "Always accessible without interrupting task flow",
+        "AI support inline: case summaries, knowledge base surfacing, suggested resolutions",
+      ],
+    },
+    {
+      heading: "Process",
+      body:
+        "15 user testing sessions over 3 months, ~20 prototype iterations. Tested with frontline agents from Starbucks, Spectrum, Disney, Jack in the Box, and Zillow. I led end-to-end as the only designer after the team lead stepped back early and the senior project lead had a family emergency.",
+    },
+    {
+      heading: "Outcome",
+      body:
+        "Shipped to 8,000+ monthly agents. 100% adoption among agents who needed the feature. External notepad usage dropped to near-zero, solving the original compliance problem of sensitive data living outside the platform.",
+    },
+  ],
 
   // Figma link removed — the current showcase file is titled "Logical | Showcase"
   // (different startup). Re-add when a properly-titled ServiceNow-specific file exists.

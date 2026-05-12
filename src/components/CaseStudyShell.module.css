@@ -214,7 +214,7 @@
   margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 24px;
 }
 .readMoreBody p {
   font-size: 16px;
@@ -224,6 +224,77 @@
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   font-weight: 300;
   max-width: 680px;
+}
+
+.longSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 680px;
+}
+.longHeading {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.55;
+  margin: 0 0 4px;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  color: white;
+}
+.longBody {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.9;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 300;
+}
+.longBullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.longBullets li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 15px;
+  line-height: 1.55;
+  opacity: 0.92;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 300;
+}
+.longBullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.5);
+}
+.longQuote {
+  margin: 6px 0 0;
+  padding: 12px 16px;
+  border-left: 2px solid rgba(255, 255, 255, 0.3);
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.longQuote p {
+  font-size: 15px;
+  line-height: 1.55;
+  font-style: italic;
+  margin: 0 0 8px;
+  opacity: 0.92;
+  font-weight: 300;
+}
+.longQuote cite {
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  opacity: 0.6;
+  font-style: normal;
 }
 
 /* ============== LOOM ============== */

@@ -3,6 +3,7 @@ import { CATEGORIES } from "@/content/categories";
 import { WaveBackground } from "@/components/WaveBackground";
 import { Sparkles } from "@/components/Sparkles";
 import { SettingsShell } from "@/components/SettingsShell";
+import { SoundSettings } from "@/components/SoundSettings";
 
 type Params = { slug: string };
 
@@ -37,7 +38,7 @@ function Content({ slug }: { slug: string }) {
     case "theme":
       return <Theme />;
     case "sound":
-      return <Sound />;
+      return <SoundSettings />;
     case "connect":
       return <Connect />;
     default:

@@ -80,9 +80,17 @@ export function XMB() {
   // Proximity-based hover boost. When the cursor moves within PROXIMITY_RADIUS
   // of a non-active icon's center, it gets a brightness boost. Clears as soon
   // as a navigation key is pressed (the glow is for mouse exploration only).
+  //
+  // Perf: rAF-throttled. Each forced layout (getBoundingClientRect) costs ~1ms,
+  // and 13 icons * 60Hz mousemove = 780 forced layouts/sec, which starves the
+  // wave shader's animation frame and causes visible jitter. Throttling to one
+  // pass per frame keeps the main thread free for the wave + framer animations.
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
+
+    let raf = 0;
+    let pendingEvent: MouseEvent | null = null;
 
     const clearAll = () => {
       container
@@ -90,12 +98,16 @@ export function XMB() {
         .forEach((el) => el.removeAttribute("data-proximity"));
     };
 
-    const onMove = (e: MouseEvent) => {
+    const process = () => {
+      raf = 0;
+      const e = pendingEvent;
+      pendingEvent = null;
+      if (!e) return;
+
       const targets = container.querySelectorAll<HTMLElement>(
         `.${styles.category}, .${styles.item}`
       );
       targets.forEach((el) => {
-        // skip active — it already glows on its own
         if (
           el.classList.contains(styles.categoryActive) ||
           el.classList.contains(styles.itemActive)
@@ -114,6 +126,12 @@ export function XMB() {
       });
     };
 
+    const onMove = (e: MouseEvent) => {
+      pendingEvent = e;
+      if (raf) return; // a frame is already queued; latest event wins
+      raf = requestAnimationFrame(process);
+    };
+
     const onKey = (e: KeyboardEvent) => {
       if (NAV_KEYS.has(e.key)) clearAll();
     };
@@ -127,6 +145,7 @@ export function XMB() {
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("keydown", onKey);
       document.removeEventListener("mouseleave", onLeave);
+      if (raf) cancelAnimationFrame(raf);
     };
   }, []);
 

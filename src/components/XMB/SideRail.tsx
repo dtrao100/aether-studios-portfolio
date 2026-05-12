@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CATEGORIES } from "@/content/categories";
 import type { Category, Item } from "@/types";
+import { play as playSound } from "@/lib/sound";
 import styles from "./SideRail.module.css";
 
 type SideRailProps = {
@@ -34,12 +35,15 @@ export function SideRail({ categoryId, activeItemId }: SideRailProps) {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
+        playSound("cancel");
         router.push("/");
       } else if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") {
         e.preventDefault();
+        playSound("navUp");
         goToItem(-1);
       } else if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") {
         e.preventDefault();
+        playSound("navDown");
         goToItem(1);
       }
     };

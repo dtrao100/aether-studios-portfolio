@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { CursorState, XMBMode } from "@/types";
 import { CATEGORIES, DEFAULT_CATEGORY_INDEX } from "@/content/categories";
+import { play as playSound, maybeStartBgm } from "@/lib/sound";
 
 type Direction = "up" | "down" | "left" | "right";
 
@@ -97,6 +98,7 @@ export function useXMBNav(opts: UseXMBNavOptions = {}) {
         }, CHARGE_AFTER_MS);
         armedTimerRef.current = setTimeout(() => {
           setOverscroll({ axis, dir, phase: "armed" });
+          playSound("unlock");
         }, ARMED_AFTER_MS);
       }
     },
@@ -122,6 +124,7 @@ export function useXMBNav(opts: UseXMBNavOptions = {}) {
         setOverscroll(null);
         clearPhaseTimers();
         setCursor({ categoryIndex: current.categoryIndex - 1, itemIndex: 0 });
+        playSound("nav");
       } else if (dir === "right") {
         if (current.categoryIndex >= CATEGORIES.length - 1) {
           if (overscrollRef.current?.axis !== "h" || overscrollRef.current?.dir !== 1) {
@@ -132,6 +135,7 @@ export function useXMBNav(opts: UseXMBNavOptions = {}) {
         setOverscroll(null);
         clearPhaseTimers();
         setCursor({ categoryIndex: current.categoryIndex + 1, itemIndex: 0 });
+        playSound("nav");
       } else if (dir === "up") {
         if (current.itemIndex <= 0) {
           if (overscrollRef.current?.axis !== "v" || overscrollRef.current?.dir !== -1) {
@@ -141,6 +145,7 @@ export function useXMBNav(opts: UseXMBNavOptions = {}) {
         }
         setOverscroll(null);
         setCursor({ ...current, itemIndex: current.itemIndex - 1 });
+        playSound("navUp");
       } else if (dir === "down") {
         if (current.itemIndex >= cat.items.length - 1) {
           if (overscrollRef.current?.axis !== "v" || overscrollRef.current?.dir !== 1) {
@@ -150,6 +155,7 @@ export function useXMBNav(opts: UseXMBNavOptions = {}) {
         }
         setOverscroll(null);
         setCursor({ ...current, itemIndex: current.itemIndex + 1 });
+        playSound("navDown");
       }
     },
     [beginOverscroll, clearPhaseTimers]
@@ -195,6 +201,8 @@ export function useXMBNav(opts: UseXMBNavOptions = {}) {
     const cat = CATEGORIES[c.categoryIndex];
     const item = cat?.items[c.itemIndex];
     if (item?.href && item.status !== "disabled") {
+      playSound("ok");
+      maybeStartBgm();
       router.push(item.href);
     }
   }, [router]);
