@@ -74,13 +74,12 @@ function Philosophy() {
       <ol style={s.list}>
         <li style={s.li}>
           <strong style={s.strong}>Translate the regulator&apos;s language into the user&apos;s.</strong>{" "}
-          The hardest part of compliance UX isn&apos;t the interface. It&apos;s
-          deciding which words to keep and which to rewrite. Form 5500 doesn&apos;t need to read like Form 5500.
+          The hardest part of compliance UX is deciding which regulator vocabulary to keep and which to rewrite. A User Access Review is a real auditor concept; the screen showing it does not need to use the auditor&apos;s words for every field.
         </li>
         <li style={s.li}>
           <strong style={s.strong}>Ship the system, not the screen.</strong> Every
           engagement leaves the team a reusable component library and a decision
-          log. The mockup is the artifact; the system is the gift.
+          log. The mockup gets handed off in a sprint. The system keeps paying for itself.
         </li>
         <li style={s.li}>
           <strong style={s.strong}>Sequential beats configurable.</strong> If users

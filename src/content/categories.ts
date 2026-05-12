@@ -28,7 +28,7 @@ export const CATEGORIES: Category[] = [
     title: "Case Studies",
     icon: "/icons/Icons.8.png",
     items: [
-      { id: "complify", title: "Complify", subtitle: "Compliance UX · 2025", meta: "Form 5500 workflows for TPAs", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/complify", status: "live" },
+      { id: "complify", title: "Complify", subtitle: "Compliance UX · 2025", meta: "User Access Reviews for audit firms", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/complify", status: "live" },
       { id: "servicenow", title: "ServiceNow", subtitle: "Enterprise · 2024", meta: "Workflow design at scale", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/servicenow", status: "live" },
       { id: "safetywing", title: "SafetyWing", subtitle: "Insurance · 2023 · write-up in progress", meta: "Nomad-first health coverage", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/safetywing", status: "coming-soon" },
     ],

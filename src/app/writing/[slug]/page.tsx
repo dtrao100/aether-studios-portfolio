@@ -55,23 +55,23 @@ const POSTS: Record<string, { targetDate: string; summary: string; thesis: strin
   "post-1": {
     targetDate: "Drop targeted mid-2026",
     summary:
-      "Why most compliance UX is bad on purpose, and what changes when you treat the regulator like a stakeholder, not a constraint.",
+      "Why most compliance UX is bad on purpose, and what changes when you treat the regulator like a stakeholder.",
     thesis:
-      "Compliance interfaces fail because designers inherit regulator-shaped vocabulary and replicate it. The unlock is rewriting the user's mental model in plain language, then letting the system handle the mapping back to the regulator. The wizard pattern at Complify is one example.",
+      "Compliance interfaces fail because designers inherit regulator-shaped vocabulary and replicate it screen for screen. Rewrite the user's mental model in plain language. Let the system handle the mapping back to the regulator. The wizard pattern at Complify is one example of how this looks in practice.",
   },
   "post-2": {
     targetDate: "Drop targeted mid-2026",
     summary:
-      "On authored interfaces, the case for personality over neutrality in B2B SaaS.",
+      "On authored interfaces. The case for personality over neutrality in B2B SaaS.",
     thesis:
-      "Most B2B design defaults to a kind of professional neutrality that's actually a stylistic choice. Neutral isn't 'invisible,' it's 'borrowed.' The interfaces I admire (Linear, Arc, Sublime Text, the PS3 XMB) all picked a register and committed. Authored doesn't mean indulgent; it means having a point of view.",
+      "Most B2B design defaults to a kind of professional neutrality that is actually a borrowed stylistic choice. Linear, Arc, Sublime Text, the PS3 XMB all picked a register and committed. Authored does not mean indulgent. It means having a point of view.",
   },
   "post-3": {
     targetDate: "Drop targeted late 2026",
     summary:
-      "Building Aether Studios at 23: solo design as a business model, AI-native as compounding leverage, and what changed when I stopped pretending to be a small agency.",
+      "Building Aether Studios at 23. Solo design as a business model. What changed when I stopped pretending to be a small agency.",
     thesis:
-      "The 'small agency' framing has been a trap for solo designers since 2010. AI-native workflows give one person the throughput of a four-person studio at a quarter of the operational drag. The shift is from 'team you wish you had' to 'system you actually built.'",
+      "The 'small agency' framing has been a trap for solo designers since 2010. AI-native workflows give one person the throughput of a four-person studio at a fraction of the operational drag. The shift is from 'team you wish you had' to 'system you actually built.'",
   },
 };
 

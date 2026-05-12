@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Aether Studios — Danny Tran",
+  title: "Aether Studios | Danny Rao",
   description:
     "Solo B2B product design consultancy specializing in compliance UX for regulated industries.",
 };
