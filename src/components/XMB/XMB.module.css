@@ -219,8 +219,10 @@
   height: 100vh;
   overflow: hidden;
   pointer-events: none;
-  /* Longer fade transitions so items soft-melt into the crossbar zone
-   * instead of getting sliced by a hard rectangular cut. */
+  /* Soft fade transitions into/out of the hidden crossbar zone. Tightened
+   * the fade-in below crossbar so the active item sits close to the bar
+   * (matches yesterday's tighter spacing — Rivet feedback was that the
+   * earlier 56vh padding left an awkward gap). */
   -webkit-mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0%,
@@ -230,10 +232,10 @@
     rgba(0, 0, 0, 0.65) 18%,
     rgba(0, 0, 0, 0.20) 22%,
     rgba(0, 0, 0, 0) 26%,
-    rgba(0, 0, 0, 0) 44%,
-    rgba(0, 0, 0, 0.20) 48%,
-    rgba(0, 0, 0, 0.65) 52%,
-    rgba(0, 0, 0, 1) 56%,
+    rgba(0, 0, 0, 0) 41%,
+    rgba(0, 0, 0, 0.35) 43%,
+    rgba(0, 0, 0, 0.85) 45%,
+    rgba(0, 0, 0, 1) 47%,
     rgba(0, 0, 0, 1) 100%
   );
   mask-image: linear-gradient(
@@ -245,10 +247,10 @@
     rgba(0, 0, 0, 0.65) 18%,
     rgba(0, 0, 0, 0.20) 22%,
     rgba(0, 0, 0, 0) 26%,
-    rgba(0, 0, 0, 0) 44%,
-    rgba(0, 0, 0, 0.20) 48%,
-    rgba(0, 0, 0, 0.65) 52%,
-    rgba(0, 0, 0, 1) 56%,
+    rgba(0, 0, 0, 0) 41%,
+    rgba(0, 0, 0, 0.35) 43%,
+    rgba(0, 0, 0, 0.85) 45%,
+    rgba(0, 0, 0, 1) 47%,
     rgba(0, 0, 0, 1) 100%
   );
 }
@@ -262,11 +264,11 @@
   flex-direction: column;
   gap: 18px;
   will-change: transform;
-  /* Anchor first item at the "active row" position, just below the mask's
-   * hidden zone. With softer mask transitions the visible-zone center sits
-   * around 56vh, so the active item reads clearly separated from the
-   * crossbar without being clipped by the fade-in. */
-  padding-top: 56vh;
+  /* Anchor first item at the "active row" position. Tight to the crossbar
+   * (matches yesterday's snug spacing). The mask fade-in lands at 47%,
+   * and items are 80px tall so the active title sits cleanly at ~48vh
+   * with no awkward gap above. */
+  padding-top: 48vh;
 }
 
 .item {
@@ -388,38 +390,44 @@
   right: 32px;
   z-index: 10;
   display: flex;
-  align-items: center;
-  gap: 14px;
+  align-items: baseline;
+  gap: 10px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+  opacity: 0.9;
 }
 
 .hudClock {
   font-size: 20px;
   letter-spacing: 0.5px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
-  opacity: 0.9;
 }
 
+/* Mute toggle reads as part of the HUD unit, sized + styled to live next to
+ * the clock without competing for visual weight. Inline-baseline aligned so
+ * it sits at the clock's text baseline; transparent until hovered. */
 .hudMuteButton {
   background: transparent;
   border: 0;
-  padding: 6px;
+  padding: 0;
   margin: 0;
-  color: rgba(255, 255, 255, 0.7);
-  display: flex;
+  color: rgba(255, 255, 255, 0.55);
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border-radius: 999px;
-  transition: color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  transition: color 0.18s ease, transform 0.18s ease;
+  position: relative;
+  top: 2px; /* nudge so icon's optical center lines up with clock numerals */
 }
 .hudMuteButton:hover {
   color: white;
-  background: rgba(255, 255, 255, 0.08);
-  transform: scale(1.06);
 }
 .hudMuteButton:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.45);
-  outline-offset: 2px;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+.hudMuteButton[data-active="true"] {
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .hudHints {
