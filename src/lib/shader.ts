@@ -100,11 +100,11 @@ export const FRAGMENT_SHADER = /* glsl */ `
     float strandsMax = max(max(max(r1, r2), max(r3, r4)), r5);
     float ribbonI = body + strandsMax * 0.30;
 
-    // Alpha falloff along X: bright on the left, tapers toward the right.
-    // Steeper exponent gives a clearer "ribbon fades out" effect matching
-    // the reference, where the right end is nearly invisible by mid-screen.
-    float xFalloff = pow(1.0 - uv.x, 1.8);   // 1.0 at left → 0.0 at right
-    xFalloff = clamp(xFalloff, 0.0, 1.0);
+    // Alpha falloff along X: brighter on the left, tapers toward the right
+    // but still reaches the right edge with significant brightness. The
+    // reference shows the wave visible across the FULL width — strong
+    // near the head, attenuated but present at the right edge.
+    float xFalloff = mix(1.0, 0.35, smoothstep(0.0, 0.9, uv.x));
 
     // Head glow: bright radial blob just on-screen at the left, sitting on
     // the ribbon's anchor line. This is the "source" where the ribbon
@@ -141,7 +141,7 @@ export const FRAGMENT_SHADER = /* glsl */ `
     float sparkles = sparkleField * sparkleWeight * 4.2;
 
     // Total white intensity
-    float intensity = ribbonI * xFalloff * 0.65 + head + sparkles;
+    float intensity = ribbonI * xFalloff * 0.85 + head + sparkles;
     intensity = clamp(intensity, 0.0, 1.0);
 
     if (intensity <= 0.01) discard;
@@ -150,6 +150,6 @@ export const FRAGMENT_SHADER = /* glsl */ `
     // Slight tint bleed (~10%) so the wave doesn't feel surgically detached
     // from the theme — keeps it cohesive with the background gradient.
     vec3 col = mix(vec3(1.0), uTint, 0.12);
-    gl_FragColor = vec4(col * intensity, intensity * 0.82);
+    gl_FragColor = vec4(col * intensity, intensity * 0.88);
   }
 `;
