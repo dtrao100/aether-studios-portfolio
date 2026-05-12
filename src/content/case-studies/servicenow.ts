@@ -8,7 +8,7 @@ export const servicenow: CaseStudy = {
   year: "2024",
   role: "Contract product designer · solo lead",
   tagline:
-    "Customer service agents had no good place to capture case-critical information during live calls. Sensitive data was ending up on sticky notes and Notepad.exe.",
+    "Agents were writing customer data into Notepad.exe because the workspace had nowhere to capture it. I gave them somewhere.",
 
   snippets: [
     {

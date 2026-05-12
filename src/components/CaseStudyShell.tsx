@@ -56,7 +56,6 @@ function Header({ study }: { study: CaseStudy }) {
         </div>
         <div className={styles.metaRight}>
           <div className={styles.role}>{study.role}</div>
-          <div className={styles.year}>{study.year}</div>
         </div>
       </div>
       <h1 className={styles.tagline}>{study.tagline}</h1>

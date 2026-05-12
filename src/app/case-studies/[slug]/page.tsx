@@ -6,7 +6,10 @@ type Params = { slug: string };
 
 export async function generateStaticParams(): Promise<Params[]> {
   const caseStudies = CATEGORIES.find((c) => c.id === "case-studies");
-  return (caseStudies?.items ?? []).map((i) => ({ slug: i.id }));
+  // Skip disabled items — they're shown locked in the XMB and have no page.
+  return (caseStudies?.items ?? [])
+    .filter((i) => i.status !== "disabled" && i.href)
+    .map((i) => ({ slug: i.id }));
 }
 
 export default async function CaseStudyPage(props: { params: Promise<Params> }) {

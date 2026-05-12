@@ -6,9 +6,9 @@ export const CATEGORIES: Category[] = [
     title: "Settings",
     icon: "/icons/Icons.35.png",
     items: [
-      { id: "display", title: "Display Settings", subtitle: "Reduced motion, theme", description: "Respect prefers-reduced-motion. Wave freezes, transitions cut to instant.", icon: "/icons/Icons.26.png", kind: "setting", href: "/settings/display" },
-      { id: "theme", title: "Theme Settings", subtitle: "5 PS3 hues, auto-drift default", description: "Click a theme to apply instantly. Auto drift cycles through all five every 90 seconds.", icon: "/icons/Icons.36.png", kind: "setting", href: "/settings/theme" },
+      { id: "theme", title: "Theme Settings", subtitle: "5 PS3 hues, auto-drift default", description: "Click a theme to apply instantly. Auto drift cycles through all five every 3 minutes.", icon: "/icons/Icons.36.png", kind: "setting", href: "/settings/theme" },
       { id: "sound", title: "Sound Settings", subtitle: "Authentic PS3 audio, opt-in", description: "Real PS3 system sounds, sourced from OSGameWare. Off by default. BGM and FX toggle independently.", icon: "/icons/Icons.34.png", kind: "setting", href: "/settings/sound" },
+      { id: "display", title: "Display Settings", subtitle: "Reduced motion", description: "Respect prefers-reduced-motion. Wave freezes, transitions cut to instant.", icon: "/icons/Icons.26.png", kind: "setting", href: "/settings/display" },
       { id: "connect", title: "Connect", subtitle: "LinkedIn / Email / GitHub", description: "Quick links to reach out or follow the work.", icon: "/icons/Icons.18.png", kind: "setting", href: "/settings/connect" },
       { id: "about-system", title: "About this System", subtitle: "Credits, attributions, build info", description: "Tech stack, asset sources, and the story behind this PS3 XMB tribute.", icon: "/icons/Icons.40.png", kind: "setting", href: "/settings/about-system" },
     ],
@@ -30,7 +30,7 @@ export const CATEGORIES: Category[] = [
     items: [
       { id: "servicenow", title: "ServiceNow", subtitle: "Enterprise", meta: "Workflow design at scale", description: "Workflow patterns for enterprise teams managing complex approvals. Component-driven design at platform scale.", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/servicenow", status: "live" },
       { id: "complify", title: "Complify", subtitle: "Startup", meta: "User Access Reviews for audit firms", description: "Redesigned the end-to-end UAR workflow from blank state to completed review. Solo product designer on a tight scope-to-ship cycle.", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/complify", status: "live" },
-      { id: "safetywing", title: "SafetyWing", subtitle: "Insurance · write-up in progress", meta: "Nomad-first health coverage", description: "Health insurance UX for digital nomads. Coverage selection without insurance jargon. Write-up coming v2.", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/safetywing", status: "coming-soon" },
+      { id: "safetywing", title: "SafetyWing", subtitle: "Insurance · locked", meta: "Nomad-first health coverage", description: "Health insurance UX for digital nomads. Write-up not yet available.", icon: "/icons/Icons.8.png", kind: "case-study", status: "disabled" },
     ],
   },
   {
@@ -49,9 +49,9 @@ export const CATEGORIES: Category[] = [
     title: "Writing",
     icon: "/icons/Icons.40.png",
     items: [
-      { id: "post-1", title: "Compliance UX, Part 1", subtitle: "Placeholder", icon: "/icons/Icons.40.png", kind: "writing", href: "/writing/post-1", status: "coming-soon" },
-      { id: "post-2", title: "On Authored Interfaces", subtitle: "Placeholder", icon: "/icons/Icons.40.png", kind: "writing", href: "/writing/post-2", status: "coming-soon" },
-      { id: "post-3", title: "Building Aether Studios", subtitle: "Placeholder", icon: "/icons/Icons.40.png", kind: "writing", href: "/writing/post-3", status: "coming-soon" },
+      { id: "post-1", title: "Compliance UX, Part 1", subtitle: "Draft in progress", icon: "/icons/Icons.40.png", kind: "writing", href: "/writing/post-1", status: "coming-soon" },
+      { id: "post-2", title: "On Authored Interfaces", subtitle: "Draft in progress", icon: "/icons/Icons.40.png", kind: "writing", href: "/writing/post-2", status: "coming-soon" },
+      { id: "post-3", title: "Building Aether Studios", subtitle: "Draft in progress", icon: "/icons/Icons.40.png", kind: "writing", href: "/writing/post-3", status: "coming-soon" },
     ],
   },
   {

@@ -6,20 +6,19 @@
   color: #f5f5f5;
   font-family: "SCE-PS3 Rodin LATIN Regular", -apple-system, BlinkMacSystemFont, sans-serif;
   overflow: hidden;
-  animation: drill-in 380ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
-@keyframes drill-in {
-  0% {
-    opacity: 0;
-    transform: scale(0.985);
-    filter: blur(4px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-    filter: blur(0);
-  }
+/* Only the inner content crossfades on sibling navigation — the side rail,
+ * main panel, and wave stay anchored. Previous version animated the whole
+ * shell on every mount, which read as a jarring per-toggle flicker when
+ * cycling between settings or case studies. */
+.content {
+  animation: content-fade-in 180ms ease-out both;
+}
+
+@keyframes content-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .main {
@@ -117,7 +116,10 @@
 .media {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* contain rather than cover so screenshots aren't cropped on the
+   * top/bottom/sides. The dark snippetMedia background acts as
+   * letterboxing when the image's aspect doesn't match the slot. */
+  object-fit: contain;
   display: block;
 }
 .placeholder {

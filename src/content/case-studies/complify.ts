@@ -4,7 +4,7 @@ export const complify: CaseStudy = {
   slug: "complify",
   title: "Activation and Workflow Clarity",
   client: "Complify",
-  category: "Compliance UX · AI-native audit",
+  category: "Conviction-backed · AI-native audit",
   year: "2025",
   role: "Product designer · solo lead",
   tagline:
@@ -18,12 +18,6 @@ export const complify: CaseStudy = {
       alt: "Wizard-based audit spec setup walkthrough",
       caption:
         "Wizard-based audit spec setup: control type → details → test plan → sampling. Auditors don't think in configurable nodes, they think in sequential steps.",
-    },
-    {
-      variant: "image",
-      src: "/case-studies/complify/complify-sidebar.png",
-      alt: "3-panel review layout with sidebar",
-      caption: "3-panel review: source document viewer, AI test results, sample sidebar. Sample-by-sample with AI-extracted fields and source tracing on every result.",
     },
     {
       variant: "image",
