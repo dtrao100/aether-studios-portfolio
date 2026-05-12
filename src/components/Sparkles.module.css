@@ -3,6 +3,8 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  /* additive blending so overlapping sparkles brighten */
+  mix-blend-mode: screen;
 }
 
 .spark {
@@ -12,36 +14,42 @@
   background: radial-gradient(
     circle,
     rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 255, 255, 0.6) 40%,
+    rgba(255, 255, 255, 0.55) 35%,
     rgba(255, 255, 255, 0) 100%
   );
   box-shadow:
-    0 0 6px rgba(255, 255, 255, 0.55),
-    0 0 14px rgba(255, 255, 255, 0.25);
+    0 0 5px rgba(255, 255, 255, 0.45),
+    0 0 11px rgba(255, 255, 255, 0.2);
   opacity: 0;
-  animation: twinkle linear infinite;
+  animation: drift-twinkle linear infinite;
   will-change: opacity, transform;
 }
 
-@keyframes twinkle {
+/* Lifecycle: spawn → grow → peak → fade → die, while drifting right.
+   Cubic-bezier on each keyframe segment gives a soft, non-mechanical pulse. */
+@keyframes drift-twinkle {
   0% {
     opacity: 0;
-    transform: scale(0.7);
+    transform: translate(0, 0) scale(0.6);
   }
-  35% {
-    opacity: 0.85;
-    transform: scale(1.05);
+  18% {
+    opacity: calc(var(--peak-opacity) * 0.7);
+    transform: translate(calc(var(--drift-x) * 0.18), -2px) scale(0.95);
   }
-  55% {
-    opacity: 0.95;
-    transform: scale(1.1);
+  42% {
+    opacity: var(--peak-opacity);
+    transform: translate(calc(var(--drift-x) * 0.42), -4px) scale(1.05);
   }
-  75% {
-    opacity: 0.4;
-    transform: scale(0.9);
+  68% {
+    opacity: calc(var(--peak-opacity) * 0.85);
+    transform: translate(calc(var(--drift-x) * 0.68), -3px) scale(1);
+  }
+  88% {
+    opacity: calc(var(--peak-opacity) * 0.35);
+    transform: translate(calc(var(--drift-x) * 0.88), 0px) scale(0.85);
   }
   100% {
     opacity: 0;
-    transform: scale(0.7);
+    transform: translate(var(--drift-x), 2px) scale(0.7);
   }
 }
