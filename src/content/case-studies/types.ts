@@ -19,13 +19,14 @@ export type Snippet = {
 export type Collaborator = {
   role: string; // "VP Product"
   name: string;
+  href?: string; // Optional LinkedIn or external profile link
 };
 
 export type LongSection = {
   heading: string;
   body?: string;
   bullets?: string[];
-  quote?: { text: string; attribution: string };
+  quote?: { text: string; attribution: string; attributionHref?: string };
 };
 
 export type CaseStudy = {

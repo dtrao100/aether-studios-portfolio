@@ -101,7 +101,6 @@ function Contact() {
       <ul style={s.linkList}>
         <li><a href="mailto:dtrao100@gmail.com" style={s.link}>dtrao100@gmail.com ↗</a></li>
         <li><a href="https://linkedin.com/in/danyalrao" target="_blank" rel="noopener noreferrer" style={s.link}>LinkedIn ↗</a></li>
-        <li><a href="https://github.com/dannymain" target="_blank" rel="noopener noreferrer" style={s.link}>GitHub ↗</a></li>
       </ul>
       <p style={{ ...s.para, marginTop: 24, opacity: 0.65 }}>
         Based in the San Francisco Bay Area. Available for both contract and

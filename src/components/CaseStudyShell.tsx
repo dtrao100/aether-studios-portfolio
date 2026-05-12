@@ -166,7 +166,20 @@ function ReadMore({ study }: { study: CaseStudy }) {
               {section.quote && (
                 <blockquote className={styles.longQuote}>
                   <p>“{section.quote.text}”</p>
-                  <cite>{section.quote.attribution}</cite>
+                  <cite>
+                    {section.quote.attributionHref ? (
+                      <a
+                        href={section.quote.attributionHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.attributionLink}
+                      >
+                        {section.quote.attribution} ↗
+                      </a>
+                    ) : (
+                      section.quote.attribution
+                    )}
+                  </cite>
                 </blockquote>
               )}
             </section>
@@ -213,7 +226,18 @@ function Footer({ study }: { study: CaseStudy }) {
             {study.collaborators!.map((c, i) => (
               <li key={i} className={styles.collabItem}>
                 <span className={styles.collabRole}>{c.role}</span>
-                <span className={styles.collabName}>{c.name}</span>
+                {c.href ? (
+                  <a
+                    href={c.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.collabName}
+                  >
+                    {c.name} ↗
+                  </a>
+                ) : (
+                  <span className={styles.collabName}>{c.name}</span>
+                )}
               </li>
             ))}
           </ul>

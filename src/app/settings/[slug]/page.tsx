@@ -176,17 +176,6 @@ function Connect() {
             </a>
             <span style={s.linkNote}>Roles, recommendations, connections</span>
           </li>
-          <li>
-            <a
-              href="https://github.com/dannymain"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={s.link}
-            >
-              GitHub ↗
-            </a>
-            <span style={s.linkNote}>This site lives here</span>
-          </li>
         </ul>
       </section>
     </>

@@ -69,12 +69,15 @@ export const complify: CaseStudy = {
       quote: {
         text: "Danny picked up our auditor compliance domain faster than people who've worked in GRC for years. He was shipping hosted prototypes fast enough that we ran real auditor sessions the same sprint he built them.",
         attribution: "Morris Hsu, Co-founder & CEO, Complify",
+        // TODO: Danny to confirm Morris's LinkedIn URL — best-guess pattern below
+        attributionHref: "https://www.linkedin.com/in/morris-hsu",
       },
     },
   ],
 
   collaborators: [
-    { role: "Co-founder & CEO", name: "Morris Hsu" },
+    // TODO: confirm Morris's LinkedIn URL
+    { role: "Co-founder & CEO", name: "Morris Hsu", href: "https://www.linkedin.com/in/morris-hsu" },
   ],
 
   // Figma link removed — the current showcase file is titled "Logical | Showcase"

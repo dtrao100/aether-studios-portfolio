@@ -9,7 +9,7 @@ export const CATEGORIES: Category[] = [
       { id: "theme", title: "Theme Settings", subtitle: "5 PS3 hues, auto-drift default", description: "Click a theme to apply instantly. Auto drift cycles through all five every 3 minutes.", icon: "/icons/Icons.36.png", kind: "setting", href: "/settings/theme" },
       { id: "sound", title: "Sound Settings", subtitle: "Authentic PS3 audio, opt-in", description: "Real PS3 system sounds, sourced from OSGameWare. Off by default. BGM and FX toggle independently.", icon: "/icons/Icons.34.png", kind: "setting", href: "/settings/sound" },
       { id: "display", title: "Display Settings", subtitle: "Reduced motion", description: "Respect prefers-reduced-motion. Wave freezes, transitions cut to instant.", icon: "/icons/Icons.26.png", kind: "setting", href: "/settings/display" },
-      { id: "connect", title: "Connect", subtitle: "LinkedIn / Email / GitHub", description: "Quick links to reach out or follow the work.", icon: "/icons/Icons.18.png", kind: "setting", href: "/settings/connect" },
+      { id: "connect", title: "Connect", subtitle: "Email / LinkedIn", description: "Quick links to reach out.", icon: "/icons/Icons.18.png", kind: "setting", href: "/settings/connect" },
       { id: "about-system", title: "About this System", subtitle: "Credits, attributions, build info", description: "Tech stack, asset sources, and the story behind this PS3 XMB tribute.", icon: "/icons/Icons.40.png", kind: "setting", href: "/settings/about-system" },
     ],
   },
