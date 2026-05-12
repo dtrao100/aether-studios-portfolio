@@ -394,6 +394,7 @@
   gap: 10px;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
   opacity: 0.9;
+  transition: opacity 0.4s ease;
 }
 
 .hudClock {
@@ -446,6 +447,26 @@
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   white-space: nowrap;
+  /* Smooth fade so the bar dissolves rather than blinks. Paired with the
+   * cursor-idle class below to fade out after inactivity. */
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* When the cursor has been idle (set by useIdleCursor), fade the keyboard
+ * hint bar out for immersion. Comes back instantly on any mousemove or
+ * keypress since the cursor-idle class flips back the same way. */
+:global(html.cursorIdle) .hudHints {
+  opacity: 0;
+  transform: translateX(-50%) translateY(8px);
+  pointer-events: none;
+}
+
+/* Top-right HUD (clock + mute) also fades for symmetry — slower fade so
+ * the clock stays useful for a brief moment longer than the hints. */
+:global(html.cursorIdle) .hudTopRight {
+  opacity: 0;
+  transition: opacity 0.9s ease 0.15s;
+  pointer-events: none;
 }
 
 .hudHints kbd {

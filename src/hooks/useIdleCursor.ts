@@ -12,7 +12,7 @@ import { useEffect } from "react";
  * the trailing inactivity timer prevents the cursor from flickering during
  * brief pauses.
  */
-export function useIdleCursor(idleMs = 2800) {
+export function useIdleCursor(idleMs = 4500) {
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | null = null;
     let hidden = false;

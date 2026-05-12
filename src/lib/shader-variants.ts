@@ -219,7 +219,7 @@ export const VARIANTS: Record<WaveVariantId, { label: string; fragment: string; 
   },
 };
 
-export const DEFAULT_VARIANT: WaveVariantId = "braided";
+export const DEFAULT_VARIANT: WaveVariantId = "ribbon-slow";
 const STORAGE_KEY = "aether_wave_variant";
 
 export function getActiveVariant(): WaveVariantId {
