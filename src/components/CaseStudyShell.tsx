@@ -25,8 +25,18 @@ export function CaseStudyShell({ slug }: CaseStudyShellProps) {
       <main className={styles.main}>
         <article className={styles.content}>
           <Header study={study} />
-          <Snippets snippets={study.snippets} />
+          {/* Hero snippet first, then stats land right under it so the
+            * impact metrics are visible without scrolling past the rest of
+            * the gallery. Remaining snippets continue below. */}
+          {study.snippets[0] && (
+            <div className={styles.snippets} style={{ marginBottom: 32 }}>
+              <SnippetBlock snippet={study.snippets[0]} index={0} />
+            </div>
+          )}
           <Stats study={study} />
+          {study.snippets.length > 1 && (
+            <Snippets snippets={study.snippets.slice(1)} />
+          )}
           <ShortNarrative study={study} />
           <ReadMore study={study} />
           <LoomEmbed study={study} />
