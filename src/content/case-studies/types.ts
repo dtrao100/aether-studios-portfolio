@@ -30,7 +30,7 @@ export type CaseStudy = {
   role: string; // "Lead product designer"
   tagline: string; // single sentence
 
-  /** 2-4 stacked media moments — primary content of the case study. */
+  /** 2-4 stacked media moments, primary content of the case study. */
   snippets: Snippet[];
 
   stats?: Stat[];

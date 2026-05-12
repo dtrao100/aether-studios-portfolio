@@ -20,7 +20,7 @@ export default function AboutSystemPage() {
           }}>Why this?</h3>
           <p style={para}>
             This portfolio is a faithful recreation of the PlayStation 3 Cross Media Bar
-            (XMB), built as the navigation shell for Aether Studios — Danny Tran&apos;s
+            (XMB), built as the navigation shell for Aether Studios, Danny Rao&apos;s
             solo B2B product design consultancy specializing in compliance UX for
             regulated industries.
           </p>
@@ -29,9 +29,9 @@ export default function AboutSystemPage() {
             visual noise in the design portfolio space; recreating an authored,
             opinionated UI from a different era signals craft, taste, and the kind of
             attention to detail that doesn&apos;t come from a template. The PS3 XMB in
-            particular embodies a specific kind of restraint — slow ambient motion,
-            generous spacing, a single bold typeface — that mirrors the design
-            philosophy applied to Aether Studios client work.
+            particular embodies a specific kind of restraint: slow ambient motion,
+            generous spacing, a single bold typeface. That register mirrors the
+            design philosophy applied to Aether Studios client work.
           </p>
           <p style={para}>
             v1 ships with three real case studies (Complify, ServiceNow, SafetyWing).
@@ -45,7 +45,7 @@ export default function AboutSystemPage() {
           <p style={para}>
             <strong style={strong}>PS3 XMB Icons Pack</strong> by Mr. Billionaire, used
             under CC BY-NC-ND 3.0. Icons © Sony Computer Entertainment. Used
-            non-commercially — this is a personal portfolio, not a commercial product.
+            non-commercially, this is a personal portfolio, not a commercial product.
           </p>
           <p style={para}>
             <strong style={strong}>SCE-PS3 Rodin Latin</strong> font loaded via
@@ -62,7 +62,7 @@ export default function AboutSystemPage() {
         <section style={{ marginBottom: 36 }}>
           <h3 style={h3}>Build Info</h3>
           <p style={para}>
-            <strong style={strong}>v1.0.0</strong> — May 2026.<br />
+            <strong style={strong}>v1.0.0</strong>, May 2026.<br />
             Next.js 16 · TypeScript · Tailwind v4 · Framer Motion · raw WebGL shader.
           </p>
         </section>
