@@ -28,9 +28,9 @@ export const CATEGORIES: Category[] = [
     title: "Case Studies",
     icon: "/icons/Icons.8.png",
     items: [
-      { id: "complify", title: "Complify", subtitle: "Compliance UX · 2025", meta: "User Access Reviews for audit firms", description: "Redesigned the end-to-end UAR workflow from blank state to completed review. Solo product designer on a tight scope-to-ship cycle.", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/complify", status: "live" },
-      { id: "servicenow", title: "ServiceNow", subtitle: "Enterprise · 2024", meta: "Workflow design at scale", description: "Workflow patterns for enterprise teams managing complex approvals. Component-driven design at platform scale.", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/servicenow", status: "live" },
-      { id: "safetywing", title: "SafetyWing", subtitle: "Insurance · 2023 · write-up in progress", meta: "Nomad-first health coverage", description: "Health insurance UX for digital nomads. Coverage selection without insurance jargon. Write-up coming v2.", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/safetywing", status: "coming-soon" },
+      { id: "servicenow", title: "ServiceNow", subtitle: "Enterprise", meta: "Workflow design at scale", description: "Workflow patterns for enterprise teams managing complex approvals. Component-driven design at platform scale.", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/servicenow", status: "live" },
+      { id: "complify", title: "Complify", subtitle: "Startup", meta: "User Access Reviews for audit firms", description: "Redesigned the end-to-end UAR workflow from blank state to completed review. Solo product designer on a tight scope-to-ship cycle.", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/complify", status: "live" },
+      { id: "safetywing", title: "SafetyWing", subtitle: "Insurance · write-up in progress", meta: "Nomad-first health coverage", description: "Health insurance UX for digital nomads. Coverage selection without insurance jargon. Write-up coming v2.", icon: "/icons/Icons.8.png", kind: "case-study", href: "/case-studies/safetywing", status: "coming-soon" },
     ],
   },
   {

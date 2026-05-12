@@ -1,13 +1,8 @@
-import { WaveBackground } from "@/components/WaveBackground";
-import { Sparkles } from "@/components/Sparkles";
 import { SettingsShell } from "@/components/SettingsShell";
 
 export default function AboutSystemPage() {
   return (
-    <>
-      <WaveBackground />
-      <Sparkles />
-      <SettingsShell slug="about-system">
+    <SettingsShell slug="about-system">
         <section style={{ marginBottom: 36 }}>
           <h3 style={{
             fontSize: 11,
@@ -67,7 +62,6 @@ export default function AboutSystemPage() {
           </p>
         </section>
       </SettingsShell>
-    </>
   );
 }
 

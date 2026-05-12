@@ -1,6 +1,4 @@
 import { CATEGORIES } from "@/content/categories";
-import { WaveBackground } from "@/components/WaveBackground";
-import { Sparkles } from "@/components/Sparkles";
 import { GenericDrillIn } from "@/components/GenericDrillIn";
 
 type Params = { slug: string };
@@ -13,13 +11,9 @@ export async function generateStaticParams(): Promise<Params[]> {
 export default async function WritingPage(props: { params: Promise<Params> }) {
   const { slug } = await props.params;
   return (
-    <>
-      <WaveBackground />
-      <Sparkles />
-      <GenericDrillIn categoryId="writing" slug={slug} metaLabel="WRITING">
-        <Content slug={slug} />
-      </GenericDrillIn>
-    </>
+    <GenericDrillIn categoryId="writing" slug={slug} metaLabel="WRITING">
+      <Content slug={slug} />
+    </GenericDrillIn>
   );
 }
 

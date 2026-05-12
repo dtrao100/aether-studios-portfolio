@@ -1,7 +1,5 @@
 import { notFound } from "next/navigation";
 import { CATEGORIES } from "@/content/categories";
-import { WaveBackground } from "@/components/WaveBackground";
-import { Sparkles } from "@/components/Sparkles";
 import { SettingsShell } from "@/components/SettingsShell";
 import { SoundSettings } from "@/components/SoundSettings";
 import { ThemePicker } from "@/components/ThemePicker";
@@ -22,13 +20,9 @@ export default async function SettingsItemPage(props: { params: Promise<Params> 
   if (!item) notFound();
 
   return (
-    <>
-      <WaveBackground />
-      <Sparkles />
-      <SettingsShell slug={slug}>
-        <Content slug={slug} />
-      </SettingsShell>
-    </>
+    <SettingsShell slug={slug}>
+      <Content slug={slug} />
+    </SettingsShell>
   );
 }
 

@@ -1,8 +1,6 @@
 import { notFound } from "next/navigation";
 import { CATEGORIES } from "@/content/categories";
 import { CaseStudyShell } from "@/components/CaseStudyShell";
-import { WaveBackground } from "@/components/WaveBackground";
-import { Sparkles } from "@/components/Sparkles";
 
 type Params = { slug: string };
 
@@ -17,11 +15,5 @@ export default async function CaseStudyPage(props: { params: Promise<Params> }) 
   const item = category?.items.find((i) => i.id === slug);
   if (!item) notFound();
 
-  return (
-    <>
-      <WaveBackground />
-      <Sparkles />
-      <CaseStudyShell slug={slug} />
-    </>
-  );
+  return <CaseStudyShell slug={slug} />;
 }
