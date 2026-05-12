@@ -57,10 +57,9 @@ Real audit data from Zillow (365 employees, 53 flagged samples) and SeatGeek (1,
     { role: "Co-founder & CEO", name: "Morris Hsu" },
   ],
 
-  externalLink: {
-    label: "View design system in Figma",
-    href: "https://www.figma.com/design/nRdzOac3gTm3jMoIqPckxx/Logical-%7C-Showcase?node-id=0-1",
-  },
+  // Figma link removed — the current showcase file is titled "Logical | Showcase"
+  // (different startup) and would misrepresent the case study if clicked. Re-add
+  // with a properly-titled ServiceNow-specific export when one exists.
 
   status: "live",
 };

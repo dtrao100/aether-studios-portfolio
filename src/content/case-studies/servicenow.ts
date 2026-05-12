@@ -55,10 +55,8 @@ The fix was a case-level notepad and a global agent-level notepad, both inside t
 
 15 user testing sessions over 3 months, ~20 iterations, agents from Starbucks, Spectrum, Disney, Jack in the Box, and Zillow. I led this end-to-end as the only designer after the team lead stepped back early in the engagement.`,
 
-  externalLink: {
-    label: "View in Figma",
-    href: "https://www.figma.com/design/nRdzOac3gTm3jMoIqPckxx/Logical-%7C-Showcase?node-id=0-1",
-  },
+  // Figma link removed — the current showcase file is titled "Logical | Showcase"
+  // (different startup). Re-add when a properly-titled ServiceNow-specific file exists.
 
   status: "live",
 };
