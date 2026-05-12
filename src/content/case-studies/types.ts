@@ -1,6 +1,9 @@
 export type Stat = {
   value: string;
   label: string;
+  /** If true, render the stat with bold emphasis (brighter / heavier weight)
+   *  to call out the headline metric. */
+  emphasize?: boolean;
 };
 
 export type SnippetVariant = "gif" | "video" | "image" | "placeholder";

@@ -108,12 +108,17 @@ export function WaveBackground() {
     let raf = 0;
     let bgUpdateCounter = 0;
 
+    // Optional ?wave-offset=N adds N seconds to uTime, letting you preview
+    // what the wave looks like at a different starting moment in its cycle.
+    const offsetParam = new URLSearchParams(window.location.search).get("wave-offset");
+    const timeOffset = offsetParam ? Number(offsetParam) : 0;
+
     const initBg = computeBg(themeRef.current, 0);
     applyBgCss(initBg.center, initBg.edge);
 
     const frame = (t: number) => {
       const isReduced = reducedRef.current;
-      const sec = t * 0.001;
+      const sec = t * 0.001 + timeOffset;
       const [r, g, b] = computeTint(themeRef.current, isReduced ? frozenT : sec);
       if (++bgUpdateCounter % 6 === 0) {
         const bg = computeBg(themeRef.current, isReduced ? frozenT : sec);

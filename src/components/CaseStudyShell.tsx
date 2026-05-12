@@ -123,7 +123,7 @@ function Stats({ study }: { study: CaseStudy }) {
   return (
     <ul className={styles.stats}>
       {study.stats.map((s, i) => (
-        <li key={i} className={styles.stat}>
+        <li key={i} className={`${styles.stat} ${s.emphasize ? styles.statEmphasis : ""}`}>
           <span className={styles.statValue}>{s.value}</span>
           <span className={styles.statLabel}>{s.label}</span>
         </li>

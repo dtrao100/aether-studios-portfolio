@@ -35,7 +35,7 @@ export const complify: CaseStudy = {
 
   stats: [
     { value: "18+", label: "Hosted prototypes shipped in 3 months" },
-    { value: "RSM", label: "Paid pilot signed off the prototype work" },
+    { value: "RSM", label: "Paid pilot signed off the prototype work", emphasize: true },
     { value: "30m", label: "Audit spec creation, down from days" },
   ],
 

@@ -40,7 +40,7 @@ export const servicenow: CaseStudy = {
   ],
 
   stats: [
-    { value: "8K+", label: "Monthly agents using it" },
+    { value: "8K+", label: "Monthly agents using it", emphasize: true },
     { value: "100%", label: "Adoption rate" },
     { value: "~0", label: "External notepad usage (was ubiquitous)" },
     { value: "20", label: "Prototype iterations" },

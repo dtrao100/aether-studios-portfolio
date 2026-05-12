@@ -194,6 +194,20 @@
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* Emphasized stat: bolder, slightly larger headline number; brighter label.
+ * Used on the case-study headline metrics (e.g. RSM, 8K+ users). */
+.statEmphasis .statValue {
+  font-weight: 700;
+  font-size: 46px;
+  letter-spacing: -0.8px;
+  text-shadow: 0 0 32px rgba(255, 255, 255, 0.18);
+}
+.statEmphasis .statLabel {
+  opacity: 0.95;
+  font-weight: 500;
+  color: white;
+}
+
 /* ============== SHORT NARRATIVE ============== */
 .shortNarrative {
   font-size: 19px;
