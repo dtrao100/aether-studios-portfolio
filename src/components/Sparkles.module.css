@@ -7,6 +7,9 @@
   mix-blend-mode: screen;
 }
 
+/* cursor glow is created via JS in Sparkles.tsx and appended to body —
+   styles applied inline to bypass CSS modules reconciliation */
+
 .spark {
   position: absolute;
   display: block;
