@@ -3,56 +3,71 @@
 import { useEffect } from "react";
 
 /**
- * Hides the mouse cursor after a period of inactivity. The cursor reappears
- * on any mouse movement or key press. Mirrors the PS3 dashboard's behavior
- * of dimming idle UI to keep the wave the focal point.
+ * Manages two document-level CSS flags driven by user input:
  *
- * The cursor itself can't be transitioned smoothly (browsers ignore CSS
- * transitions on the `cursor` property), so this is a hard hide/show — but
- * the trailing inactivity timer prevents the cursor from flickering during
- * brief pauses.
+ *   html.cursorIdle  — cursor should be hidden. Set on keydown (keyboard
+ *                      mode, mouse cursor is in the way) and after long
+ *                      mouse inactivity. Cleared on mousemove.
+ *
+ *   html.hudUsed     — user has interacted with the UI. Set once any
+ *                      keydown or mousedown happens and stays sticky for
+ *                      the session. Used to fade the keyboard-hint pill
+ *                      once it's redundant.
+ *
+ * CSS rules in XMB.module.css read these globals to fade the cursor +
+ * hint bar appropriately. Together they make the interface more
+ * immersive once the user demonstrates they know how to drive it.
  */
-export function useIdleCursor(idleMs = 4500) {
+export function useIdleCursor(idleMs = 8000) {
   useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | null = null;
-    let hidden = false;
-
-    const show = () => {
-      if (hidden) {
-        document.documentElement.classList.remove("cursorIdle");
-        hidden = false;
-      }
+    let idleTimer: ReturnType<typeof setTimeout> | null = null;
+    const root = document.documentElement;
+    const setCursorHidden = (hidden: boolean) => {
+      root.classList.toggle("cursorIdle", hidden);
+    };
+    const markHudUsed = () => {
+      root.classList.add("hudUsed");
     };
 
-    const scheduleHide = () => {
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => {
-        document.documentElement.classList.add("cursorIdle");
-        hidden = true;
-      }, idleMs);
+    const scheduleIdleHide = () => {
+      if (idleTimer) clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => setCursorHidden(true), idleMs);
     };
 
     const onMove = () => {
-      show();
-      scheduleHide();
+      setCursorHidden(false);
+      scheduleIdleHide();
     };
 
     const onKey = () => {
-      show();
-      scheduleHide();
+      // Keyboard mode: cursor isn't being used to drive nav, hide it so
+      // it doesn't visually compete with the active item.
+      setCursorHidden(true);
+      markHudUsed();
+      if (idleTimer) {
+        clearTimeout(idleTimer);
+        idleTimer = null;
+      }
     };
 
-    // start with the show-then-schedule cycle so the cursor is visible on
-    // mount but will fade if untouched
-    scheduleHide();
+    const onMouseDown = () => {
+      markHudUsed();
+    };
+
+    // Initial state: cursor visible, hints visible, idle timer armed.
+    setCursorHidden(false);
+    scheduleIdleHide();
 
     window.addEventListener("mousemove", onMove);
     window.addEventListener("keydown", onKey);
+    window.addEventListener("mousedown", onMouseDown);
     return () => {
-      if (timer) clearTimeout(timer);
-      document.documentElement.classList.remove("cursorIdle");
+      if (idleTimer) clearTimeout(idleTimer);
+      root.classList.remove("cursorIdle");
+      root.classList.remove("hudUsed");
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener("mousedown", onMouseDown);
     };
   }, [idleMs]);
 }
