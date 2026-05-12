@@ -219,30 +219,36 @@
   height: 100vh;
   overflow: hidden;
   pointer-events: none;
+  /* Longer fade transitions so items soft-melt into the crossbar zone
+   * instead of getting sliced by a hard rectangular cut. */
   -webkit-mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.5) 3%,
-    rgba(0, 0, 0, 1) 6%,
-    rgba(0, 0, 0, 1) 13%,
-    rgba(0, 0, 0, 0.5) 16%,
-    rgba(0, 0, 0, 0) 20%,
-    rgba(0, 0, 0, 0) 46%,
-    rgba(0, 0, 0, 0.5) 49%,
-    rgba(0, 0, 0, 1) 52%,
+    rgba(0, 0, 0, 0.4) 4%,
+    rgba(0, 0, 0, 1) 11%,
+    rgba(0, 0, 0, 1) 14%,
+    rgba(0, 0, 0, 0.65) 18%,
+    rgba(0, 0, 0, 0.20) 22%,
+    rgba(0, 0, 0, 0) 26%,
+    rgba(0, 0, 0, 0) 44%,
+    rgba(0, 0, 0, 0.20) 48%,
+    rgba(0, 0, 0, 0.65) 52%,
+    rgba(0, 0, 0, 1) 56%,
     rgba(0, 0, 0, 1) 100%
   );
   mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.5) 3%,
-    rgba(0, 0, 0, 1) 6%,
-    rgba(0, 0, 0, 1) 13%,
-    rgba(0, 0, 0, 0.5) 16%,
-    rgba(0, 0, 0, 0) 20%,
-    rgba(0, 0, 0, 0) 46%,
-    rgba(0, 0, 0, 0.5) 49%,
-    rgba(0, 0, 0, 1) 52%,
+    rgba(0, 0, 0, 0.4) 4%,
+    rgba(0, 0, 0, 1) 11%,
+    rgba(0, 0, 0, 1) 14%,
+    rgba(0, 0, 0, 0.65) 18%,
+    rgba(0, 0, 0, 0.20) 22%,
+    rgba(0, 0, 0, 0) 26%,
+    rgba(0, 0, 0, 0) 44%,
+    rgba(0, 0, 0, 0.20) 48%,
+    rgba(0, 0, 0, 0.65) 52%,
+    rgba(0, 0, 0, 1) 56%,
     rgba(0, 0, 0, 1) 100%
   );
 }
@@ -257,11 +263,10 @@
   gap: 18px;
   will-change: transform;
   /* Anchor first item at the "active row" position, just below the mask's
-   * hidden zone. The category bar lives in 24-44vh; we leave a buffer and
-   * start items at 50vh so the active row reads as clearly separated from
-   * the crossbar (matches the PS3 reference's gap between crossbar and
-   * first item below). */
-  padding-top: 50vh;
+   * hidden zone. With softer mask transitions the visible-zone center sits
+   * around 56vh, so the active item reads clearly separated from the
+   * crossbar without being clipped by the fade-in. */
+  padding-top: 56vh;
 }
 
 .item {
@@ -324,41 +329,9 @@
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* Description card: reveals to the right of the active item.
-   Inactive items still render the node (for crossfade) but at zero opacity.
-   The card is part of the item row so it tracks vertical position automatically
-   as the cursor moves up/down — no separate panel that needs to chase the
-   active row. */
-.itemDescription {
-  margin-left: auto;
-  margin-right: 8px;
-  max-width: 340px;
-  padding: 14px 20px;
-  font-size: 14px;
-  line-height: 1.55;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.94);
-  background: linear-gradient(
-    135deg,
-    rgba(10, 14, 28, 0.55),
-    rgba(10, 14, 28, 0.35)
-  );
-  border-left: 2px solid rgba(255, 255, 255, 0.32);
-  border-radius: 0 4px 4px 0;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  opacity: 0;
-  transform: translateX(8px);
-  transition: opacity 0.32s ease 0.08s, transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1) 0.08s;
-  pointer-events: none;
-}
-
-.itemActive .itemDescription {
-  opacity: 1;
-  transform: translateX(0);
-}
+/* Description card removed per Rivet feedback — real PS3 XMB just shows
+ * icon + title + small subtitle inline, no side panel. The full description
+ * lives in the destination page after clicking. */
 
 /* Entering: PS3-style depth zoom on enter press. The active item scales up
    and glows brighter, the rest fades and pulls back slightly. After ~340ms
@@ -390,12 +363,6 @@
   animation: enter-zoom 340ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.container.entering .itemDescription {
-  opacity: 0 !important;
-  transform: translateX(20px) !important;
-  transition: opacity 200ms ease, transform 260ms cubic-bezier(0.4, 0, 1, 1) !important;
-}
-
 @keyframes enter-zoom {
   0% {
     opacity: 1;
@@ -415,15 +382,44 @@
 }
 
 /* HUD */
-.hudClock {
+.hudTopRight {
   position: fixed;
   top: 24px;
   right: 32px;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hudClock {
   font-size: 20px;
   letter-spacing: 0.5px;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
   opacity: 0.9;
+}
+
+.hudMuteButton {
+  background: transparent;
+  border: 0;
+  padding: 6px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 999px;
+  transition: color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+.hudMuteButton:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(1.06);
+}
+.hudMuteButton:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.45);
+  outline-offset: 2px;
 }
 
 .hudHints {

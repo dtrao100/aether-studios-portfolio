@@ -228,11 +228,6 @@ export function XMB() {
                 {item.status === "disabled" && (
                   <span className={styles.itemStatus}>v2</span>
                 )}
-                {item.description && (
-                  <div className={styles.itemDescription} aria-hidden={!isActive}>
-                    {item.description}
-                  </div>
-                )}
               </div>
             );
           })}

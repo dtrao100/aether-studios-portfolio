@@ -80,7 +80,7 @@ export const THEMES: Record<Exclude<ThemeId, "drift">, ThemePalette> = {
 export const DRIFT_THEME: ThemePalette = {
   id: "drift",
   label: "Auto drift",
-  note: "Cycles through all five themes over 90 seconds. Default.",
+  note: "Cycles through all five themes over 3 minutes. Default.",
   rgb: [0.55, 0.55, 0.58], // unused; drift computes per frame
   bgCenter: "#1c1c28", bgEdge: "#0a0a14", // approximate midpoint
   swatch:
@@ -88,7 +88,8 @@ export const DRIFT_THEME: ThemePalette = {
 };
 
 export const DRIFT_SEQUENCE: ThemeId[] = ["navy", "indigo", "blue", "gray", "warm"];
-export const DRIFT_CYCLE_SECONDS = 90;
+// 180s full cycle = ~36s per theme. Rivet feedback: 90s felt too fast.
+export const DRIFT_CYCLE_SECONDS = 180;
 
 const isClient = () => typeof window !== "undefined";
 

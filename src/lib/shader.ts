@@ -59,15 +59,16 @@ export const FRAGMENT_SHADER = /* glsl */ `
 
   void main() {
     vec2 uv = gl_FragCoord.xy / uResolution;
-    float t = uTime * 0.35;
+    // Slower wave flow — Rivet feedback: tendrils were too fast.
+    float t = uTime * 0.20;
 
     // The ribbon's "anchor" Y drifts slowly. gl_FragCoord has Y=0 at bottom,
     // so 0.38 means ~62% down from the top of screen (matches reference where
     // the wave sits in the lower-middle of the screen, head bottom-left).
-    float anchorY = 0.38 + sin(uTime * 0.08) * 0.08;
+    float anchorY = 0.38 + sin(uTime * 0.05) * 0.08;
     // Slope drifts more dramatically so the wave clearly arcs uphill/downhill
     // across long timescales (reference shows obvious up-down curves).
-    float slope = sin(uTime * 0.05) * 0.28;
+    float slope = sin(uTime * 0.032) * 0.28;
 
     // 5 thin braided strands clustered tightly around the anchor. The body
     // band underneath fills the ribbon's thickness; the strands act as
@@ -124,29 +125,37 @@ export const FRAGMENT_SHADER = /* glsl */ `
     // ellipse on widescreen)
     vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
     float headDist = distance(uv * aspect, headPos * aspect);
-    // Multi-zone glow matching the reference's bright source point
-    float head = exp(-headDist * 28.0) * 1.30;    // ultra-tight bright nucleus
-    head += exp(-headDist * 12.0) * 0.62;         // tight halo
-    head += exp(-headDist * 5.0) * 0.28;          // medium glow
-    head += exp(-headDist * 2.0) * 0.10;          // soft outer bloom
+    // Reference shows the head as a bright SOURCE of the ribbon, not a
+    // discrete bulb. Previous pass had a too-prominent nucleus reading as
+    // a white ball stuck to the wave. Tightened to be more like a bright
+    // brightening of the ribbon's start, with subtle halo only.
+    float head = exp(-headDist * 28.0) * 0.55;    // brighter ribbon start
+    head += exp(-headDist * 13.0) * 0.30;         // tight halo
+    head += exp(-headDist * 6.0) * 0.14;          // soft bloom
 
-    // Sparkle field: pseudo-random bright points clustered near the head and
-    // along the ribbon. The reference shows a TIGHT CLUSTER of small white
-    // dots immediately around the source point, with a few scattered along
-    // the wave path.
+    // Sparkle field: pseudo-random bright points clustered tightly around
+    // the head, fanning out into a cone toward the right. Rivet feedback:
+    // sparkles were too spread out and pulsed too often. Now:
+    //   - density falls off sharply with X (cone from left bounds)
+    //   - flicker frequency is much slower (calmer twinkle)
+    //   - sparser overall (higher visibility threshold)
     vec2 sparkleUV = uv * vec2(220.0, 130.0);
     vec2 sparkleId = floor(sparkleUV);
     vec2 sparkleFrac = fract(sparkleUV) - 0.5;
     float sparkleSeed = hash21(sparkleId);
-    float sparkleVis = step(0.978, sparkleSeed); // slightly denser
-    float sparkleFlicker = 0.4 + 0.6 * sin(uTime * (1.0 + sparkleSeed * 4.0) + sparkleSeed * 6.28);
+    float sparkleVis = step(0.988, sparkleSeed); // sparser
+    // slower flicker so twinkles feel calm, not strobe-like
+    float sparkleFlicker = 0.3 + 0.7 * sin(uTime * (0.35 + sparkleSeed * 1.4) + sparkleSeed * 6.28);
     float sparkleShape = exp(-dot(sparkleFrac, sparkleFrac) * 55.0);
-    float sparkleField = sparkleVis * sparkleShape * sparkleFlicker;
-    // Heavy weighting near the head (dominant cluster) plus light spread
-    // along the ribbon path
+    float sparkleField = sparkleVis * sparkleShape * max(0.0, sparkleFlicker);
+
+    // Cone from left: density drops off sharply with X. Combined with the
+    // existing xFalloff (which already attenuates) gives a tight left-side
+    // cluster instead of a screen-wide spread.
+    float coneMask = pow(1.0 - uv.x, 2.5);
     float headProx = exp(-headDist * 4.0);
-    float sparkleWeight = ribbonI * 0.8 + head * 2.0 + headProx * 1.2 + 0.08;
-    sparkleWeight *= xFalloff;
+    float sparkleWeight = (head * 1.8 + headProx * 1.5 + ribbonI * 0.25 + 0.04)
+                         * coneMask;
     float sparkles = sparkleField * sparkleWeight * 4.2;
 
     // Total white intensity
