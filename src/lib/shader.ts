@@ -87,18 +87,25 @@ export const FRAGMENT_SHADER = /* glsl */ `
     float r4 = ribbon(d4, 0.008);
     float r5 = ribbon(d5, 0.007);
 
-    // Wide diffuse smoke body — DOMINANT visual element. Three-zone
-    // falloff (inner solid + outer fade + far halo) for the soft thick
-    // ribbon shape.
-    float bodyD = min(d1, min(d2, min(d3, min(d4, d5))));
-    float bodyInner = pow(1.0 - clamp(bodyD / 0.035, 0.0, 1.0), 1.5) * 0.80;
-    float bodyOuter = pow(1.0 - clamp(bodyD / 0.090, 0.0, 1.0), 2.4) * 0.35;
-    float bodyFar   = pow(1.0 - clamp(bodyD / 0.150, 0.0, 1.0), 3.0) * 0.12;
+    // ONE unified soft body band centered on a "mean wave" path. Previously
+    // body used min(strand distances) which created ridges following each
+    // strand — that made the wave look like parallel ribbons. Using a
+    // single mean-curve as the body's centerline gives a truly continuous
+    // soft ribbon for the strands to braid through.
+    float meanY = anchorY
+                + slope * (uv.x - 0.5)
+                + sin(uv.x * 2.0 + t * 0.95) * 0.075 * 1.4
+                + sin(uv.x * 1.5 + t * 0.7) * 0.040;
+    float meanD = abs(uv.y - meanY);
+    float bodyInner = pow(1.0 - clamp(meanD / 0.035, 0.0, 1.0), 1.6) * 0.85;
+    float bodyOuter = pow(1.0 - clamp(meanD / 0.080, 0.0, 1.0), 2.4) * 0.35;
+    float bodyFar   = pow(1.0 - clamp(meanD / 0.140, 0.0, 1.0), 3.0) * 0.12;
     float body = bodyInner + bodyOuter + bodyFar;
 
-    // Body dominates; strands add subtle bright-vein texture for braiding.
+    // Body dominates; strands contribute mild texture only. Reference reads
+    // as a soft wispy ribbon — distinct strand lines would feel wrong.
     float strandsMax = max(max(max(r1, r2), max(r3, r4)), r5);
-    float ribbonI = body + strandsMax * 0.30;
+    float ribbonI = body + strandsMax * 0.18;
 
     // Alpha falloff along X: brighter on the left, tapers toward the right
     // but still reaches the right edge with significant brightness. The
@@ -116,10 +123,10 @@ export const FRAGMENT_SHADER = /* glsl */ `
     vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
     float headDist = distance(uv * aspect, headPos * aspect);
     // Multi-zone glow matching the reference's bright source point
-    float head = exp(-headDist * 32.0) * 1.20;    // ultra-tight bright nucleus
-    head += exp(-headDist * 14.0) * 0.55;         // tight halo
-    head += exp(-headDist * 6.0) * 0.22;          // medium glow
-    head += exp(-headDist * 2.5) * 0.08;          // soft outer bloom
+    float head = exp(-headDist * 28.0) * 1.30;    // ultra-tight bright nucleus
+    head += exp(-headDist * 12.0) * 0.62;         // tight halo
+    head += exp(-headDist * 5.0) * 0.28;          // medium glow
+    head += exp(-headDist * 2.0) * 0.10;          // soft outer bloom
 
     // Sparkle field: pseudo-random bright points clustered near the head and
     // along the ribbon. The reference shows a TIGHT CLUSTER of small white
