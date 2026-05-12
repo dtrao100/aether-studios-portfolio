@@ -23,40 +23,47 @@ export type ThemePalette = {
 
 const STORAGE_KEY = "aether_theme";
 
+/**
+ * Background colors match the PS3 dashboard reference: the bg carries the
+ * theme hue, the wave reads as white over it. Center is the "lit" middle
+ * band (where the wave sits) and edge is the darker corner vignette.
+ * Increased saturation vs. the earlier muted values so the theme reads
+ * clearly without needing the wave to be tinted.
+ */
 export const THEMES: Record<Exclude<ThemeId, "drift">, ThemePalette> = {
   gray:   {
     id: "gray", label: "Original Gray",
     note: "The XMB's neutral, pre-firmware-3 tone.",
     rgb: [0.55, 0.55, 0.58],
-    bgCenter: "#2a2a2c", bgEdge: "#141416",
+    bgCenter: "#3a3a40", bgEdge: "#0c0c10",
     swatch: "linear-gradient(135deg, #6b6b6b, #2a2a2a)",
   },
   blue: {
     id: "blue", label: "Launch Blue",
     note: "The PS3 launch theme. Deep, cinematic.",
     rgb: [0.30, 0.50, 0.80],
-    bgCenter: "#142042", bgEdge: "#06101e",
+    bgCenter: "#1a3580", bgEdge: "#040a24",
     swatch: "linear-gradient(135deg, #2b4cc8, #0d2270)",
   },
   indigo: {
     id: "indigo", label: "Indigo",
     note: "Twilight register. Warmer at low brightness.",
     rgb: [0.42, 0.32, 0.72],
-    bgCenter: "#26173f", bgEdge: "#0e0820",
+    bgCenter: "#36206a", bgEdge: "#0a0418",
     swatch: "linear-gradient(135deg, #6b48b9, #2d1e6a)",
   },
   navy: {
     id: "navy", label: "Deep Navy",
-    note: "Most muted of the colored themes.",
+    note: "The reference frame's hue. Classic PS3.",
     rgb: [0.18, 0.30, 0.62],
-    bgCenter: "#12204a", bgEdge: "#05091c",
+    bgCenter: "#0e2870", bgEdge: "#02061a",
     swatch: "linear-gradient(135deg, #2e4894, #0a1640)",
   },
   warm: {
     id: "warm", label: "Warm Gray",
     note: "Slight ochre cast. Desk-lamp light at 11pm.",
     rgb: [0.62, 0.55, 0.50],
-    bgCenter: "#2a221c", bgEdge: "#14100c",
+    bgCenter: "#3a2c20", bgEdge: "#100a06",
     swatch: "linear-gradient(135deg, #9e8f7e, #3c3024)",
   },
 };
