@@ -329,6 +329,60 @@
   transform: translateX(0);
 }
 
+/* Entering: PS3-style depth zoom on enter press. The active item scales up
+   and glows brighter, the rest fades and pulls back slightly. After ~340ms
+   the router pushes the new route and the destination page fades in. */
+.container.entering .categoryViewport,
+.container.entering .itemTrack {
+  pointer-events: none;
+}
+
+.container.entering .category:not(.categoryActive) {
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 280ms ease, transform 280ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+.container.entering .categoryActive {
+  opacity: 0;
+  transform: scale(1.18);
+  transition: opacity 320ms ease 40ms;
+}
+
+.container.entering .item:not(.itemActive) {
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: opacity 240ms ease, transform 280ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+.container.entering .itemActive {
+  animation: enter-zoom 340ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.container.entering .itemDescription {
+  opacity: 0 !important;
+  transform: translateX(20px) !important;
+  transition: opacity 200ms ease, transform 260ms cubic-bezier(0.4, 0, 1, 1) !important;
+}
+
+@keyframes enter-zoom {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateZ(0);
+    filter: drop-shadow(0 0 0 rgba(255, 255, 255, 0));
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.32) translateZ(0);
+    filter: drop-shadow(0 0 28px rgba(255, 255, 255, 0.55));
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6) translateZ(0);
+    filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.85));
+  }
+}
+
 /* HUD */
 .hudClock {
   position: fixed;

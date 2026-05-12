@@ -43,16 +43,18 @@ export const FRAGMENT_SHADER = /* glsl */ `
     vec3 base = uTint;
     vec3 c = vec3(0.0);
     // forward-falloff (visible above the wave line): broader, slower
-    c += calcSine(uv, 0.18, 0.18, 0.18, 0.0, 0.50, base, 0.38, 2.8, false);
-    c += calcSine(uv, 0.32, 0.36, 0.14, 0.0, 0.52, base, 0.28, 3.5, false);
-    c += calcSine(uv, 0.24, 0.55, 0.12, 0.0, 0.48, base, 0.24, 4.0, false);
+    c += calcSine(uv, 0.18, 0.18, 0.22, 0.0, 0.50, base, 0.34, 3.0, false);
+    c += calcSine(uv, 0.32, 0.36, 0.18, 0.0, 0.52, base, 0.26, 3.8, false);
+    c += calcSine(uv, 0.24, 0.55, 0.15, 0.0, 0.48, base, 0.22, 4.5, false);
     // inverted-falloff (visible below the wave line): brighter highlights
-    c += calcSine(uv, 0.12, 0.24, 0.08, 0.0, 0.34, base, 0.26, 3.5, true);
-    c += calcSine(uv, 0.28, 0.34, 0.07, 0.0, 0.32, base, 0.22, 4.0, true);
-    // clamp before alpha so over-accumulation doesn't blow out the center
-    c = min(c, base);
+    c += calcSine(uv, 0.12, 0.24, 0.10, 0.0, 0.34, base, 0.24, 3.8, true);
+    c += calcSine(uv, 0.28, 0.34, 0.09, 0.0, 0.32, base, 0.20, 4.5, true);
+    c += calcSine(uv, 0.40, 0.44, 0.08, 0.0, 0.30, base, 0.18, 5.5, true);
+    // soft clamp: allow center to brighten past base color (slight bloom)
+    // but cap at 1.5x base to prevent total white-out.
+    c = min(c, base * 1.5);
     float m = max(max(c.r, c.g), c.b);
     if (m <= 0.0) discard;
-    gl_FragColor = vec4(c, m * 0.48);
+    gl_FragColor = vec4(c, m * 0.70);
   }
 `;

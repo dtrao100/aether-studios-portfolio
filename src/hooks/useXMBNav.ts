@@ -196,14 +196,25 @@ export function useXMBNav(opts: UseXMBNavOptions = {}) {
     setOverscroll(null);
   }, [clearPhaseTimers]);
 
+  const [entering, setEntering] = useState(false);
+  const enteringRef = useRef(false);
+
   const enter = useCallback(() => {
+    if (enteringRef.current) return; // double-press guard
     const c = cursorRef.current;
     const cat = CATEGORIES[c.categoryIndex];
     const item = cat?.items[c.itemIndex];
     if (item?.href && item.status !== "disabled") {
       playSound("ok");
       maybeStartBgm();
-      router.push(item.href);
+      enteringRef.current = true;
+      setEntering(true);
+      // Hold the XMB in "entering" state long enough for the depth-zoom
+      // animation to read before pushing the route. Destination pages run
+      // their own fade-in to complete the handoff.
+      setTimeout(() => {
+        router.push(item.href!);
+      }, 340);
     }
   }, [router]);
 
@@ -278,6 +289,7 @@ export function useXMBNav(opts: UseXMBNavOptions = {}) {
   return {
     cursor,
     overscroll,
+    entering,
     enter,
     setCursor: setCursorTo,
     categories: CATEGORIES,

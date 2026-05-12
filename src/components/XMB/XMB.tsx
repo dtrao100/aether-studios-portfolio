@@ -28,7 +28,7 @@ const SLINGSHOT_TRANSITION =
   "transform 950ms cubic-bezier(0.16, 0.88, 0.32, 1.18)"; // overshoot-y curve
 
 export function XMB() {
-  const { cursor, categories, setCursor, enter, overscroll } = useXMBNav();
+  const { cursor, categories, setCursor, enter, overscroll, entering } = useXMBNav();
 
   const activeCategory = categories[cursor.categoryIndex];
   const items = activeCategory?.items ?? [];
@@ -150,7 +150,10 @@ export function XMB() {
   }, []);
 
   return (
-    <div ref={containerRef} className={styles.container}>
+    <div
+      ref={containerRef}
+      className={`${styles.container} ${entering ? styles.entering : ""}`}
+    >
       {/* horizontal category bar */}
       <div className={styles.categoryViewport}>
         <div
