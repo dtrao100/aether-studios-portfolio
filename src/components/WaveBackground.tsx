@@ -3,9 +3,11 @@
 import { useEffect, useRef } from "react";
 import { FRAGMENT_SHADER, VERTEX_SHADER } from "@/lib/shader";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useIdleCursor } from "@/hooks/useIdleCursor";
 import { applyBgCss, computeBg, computeTint, getActiveTheme, type ThemeId } from "@/lib/theme";
 
 export function WaveBackground() {
+  useIdleCursor();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const reducedMotion = useReducedMotion();
   const reducedRef = useRef(reducedMotion);

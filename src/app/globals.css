@@ -47,3 +47,11 @@ a {
 button {
   font-family: inherit;
 }
+
+/* Cursor inactivity: applied by useIdleCursor after a period of no
+ * mouse/keyboard activity. Hides the native cursor everywhere until the
+ * user moves the mouse or presses a key. */
+html.cursorIdle,
+html.cursorIdle * {
+  cursor: none !important;
+}
