@@ -12,24 +12,17 @@ export const complify: CaseStudy = {
 
   snippets: [
     {
-      variant: "image",
-      src: "/case-studies/complify/complify-hero.png",
-      alt: "Complify 3-panel audit review — hero",
-      caption:
-        "Core product: 3-panel layout. Source document viewer, AI test results, sample sidebar. Each sample runs 4 automated tests against source evidence with confidence scores visible on every field.",
-    },
-    {
       variant: "gif",
       src: "/case-studies/complify/complify-wizard.gif",
-      alt: "Wizard-based audit spec setup",
+      alt: "Wizard-based audit spec setup walkthrough",
       caption:
-        "Wizard-based audit spec setup: control type → details → test plan → sampling. Auditors don’t think in nodes; they think in sequential steps.",
+        "Wizard-based audit spec setup: control type → details → test plan → sampling. Auditors don't think in configurable nodes — they think in sequential steps.",
     },
     {
       variant: "image",
       src: "/case-studies/complify/complify-sidebar.png",
       alt: "3-panel review layout with sidebar",
-      caption: "Sample-by-sample review with AI-extracted fields and source tracing.",
+      caption: "3-panel review: source document viewer, AI test results, sample sidebar. Sample-by-sample with AI-extracted fields and source tracing on every result.",
     },
     {
       variant: "image",
@@ -41,7 +34,7 @@ export const complify: CaseStudy = {
       variant: "image",
       src: "/case-studies/complify/complify-export.png",
       alt: "Export to D&T testing sheet format",
-      caption: "Export drops into the D&T testing sheet format auditors already use.",
+      caption: "Export drops into the D&T testing sheet format auditors already use — minimal friction adoption.",
     },
   ],
 

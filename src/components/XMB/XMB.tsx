@@ -1,9 +1,17 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { useXMBNav } from "@/hooks/useXMBNav";
 import { HUD } from "./HUD";
 import styles from "./XMB.module.css";
+
+const PROXIMITY_RADIUS = 90;
+const NAV_KEYS = new Set([
+  "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown",
+  "Enter", " ", "Escape",
+  "w", "W", "a", "A", "s", "S", "d", "D",
+]);
 
 const CATEGORY_GAP = 170;
 const ITEM_GAP = 98;
@@ -67,8 +75,63 @@ export function XMB() {
     .filter(Boolean)
     .join(" ");
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Proximity-based hover boost. When the cursor moves within PROXIMITY_RADIUS
+  // of a non-active icon's center, it gets a brightness boost. Clears as soon
+  // as a navigation key is pressed (the glow is for mouse exploration only).
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const clearAll = () => {
+      container
+        .querySelectorAll<HTMLElement>("[data-proximity='true']")
+        .forEach((el) => el.removeAttribute("data-proximity"));
+    };
+
+    const onMove = (e: MouseEvent) => {
+      const targets = container.querySelectorAll<HTMLElement>(
+        `.${styles.category}, .${styles.item}`
+      );
+      targets.forEach((el) => {
+        // skip active — it already glows on its own
+        if (
+          el.classList.contains(styles.categoryActive) ||
+          el.classList.contains(styles.itemActive)
+        ) {
+          el.removeAttribute("data-proximity");
+          return;
+        }
+        const r = el.getBoundingClientRect();
+        const cx = r.x + r.width / 2;
+        const cy = r.y + r.height / 2;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        const within = dx * dx + dy * dy < PROXIMITY_RADIUS * PROXIMITY_RADIUS;
+        if (within) el.setAttribute("data-proximity", "true");
+        else el.removeAttribute("data-proximity");
+      });
+    };
+
+    const onKey = (e: KeyboardEvent) => {
+      if (NAV_KEYS.has(e.key)) clearAll();
+    };
+
+    const onLeave = () => clearAll();
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("keydown", onKey);
+    document.addEventListener("mouseleave", onLeave);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("keydown", onKey);
+      document.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
   return (
-    <div className={styles.container}>
+    <div ref={containerRef} className={styles.container}>
       {/* horizontal category bar */}
       <div className={styles.categoryViewport}>
         <div
