@@ -1,8 +1,11 @@
-import { notFound } from "next/navigation";
+"use client";
+
+import { useState } from "react";
+import { notFound, useRouter } from "next/navigation";
 import { SideRail } from "@/components/XMB/SideRail";
 import { HUD } from "@/components/XMB/HUD";
 import { getCaseStudy } from "@/content/case-studies";
-import type { CaseStudy } from "@/content/case-studies";
+import type { CaseStudy, Snippet } from "@/content/case-studies/types";
 import styles from "./CaseStudyShell.module.css";
 
 type CaseStudyShellProps = {
@@ -11,21 +14,24 @@ type CaseStudyShellProps = {
 
 export function CaseStudyShell({ slug }: CaseStudyShellProps) {
   const study = getCaseStudy(slug);
-  if (!study) notFound();
+  if (!study) {
+    notFound();
+  }
 
   return (
     <div className={styles.layout}>
       <SideRail categoryId="case-studies" activeItemId={slug} />
 
       <main className={styles.main}>
-        <div className={styles.content}>
+        <article className={styles.content}>
           <Header study={study} />
-          <Hero study={study} />
+          <Snippets snippets={study.snippets} />
           <Stats study={study} />
-          <Narrative study={study} />
+          <ShortNarrative study={study} />
+          <ReadMore study={study} />
           <LoomEmbed study={study} />
-          <ExternalCta study={study} />
-        </div>
+          <Footer study={study} />
+        </article>
       </main>
 
       <HUD
@@ -43,51 +49,62 @@ export function CaseStudyShell({ slug }: CaseStudyShellProps) {
 function Header({ study }: { study: CaseStudy }) {
   return (
     <header className={styles.header}>
-      <div className={styles.meta}>
-        {study.category} · {study.year} · {study.role}
+      <div className={styles.headerRow}>
+        <div className={styles.metaLeft}>
+          <div className={styles.client}>{study.client}</div>
+          <div className={styles.metaSub}>{study.category}</div>
+        </div>
+        <div className={styles.metaRight}>
+          <div className={styles.role}>{study.role}</div>
+          <div className={styles.year}>{study.year}</div>
+        </div>
       </div>
-      <h1 className={styles.title}>{study.title}</h1>
-      <p className={styles.lede}>{study.tagline}</p>
+      <h1 className={styles.tagline}>{study.tagline}</h1>
     </header>
   );
 }
 
-function Hero({ study }: { study: CaseStudy }) {
-  if (study.heroVariant === "video" && study.heroSrc) {
-    return (
-      <figure className={styles.hero}>
-        <video
-          src={study.heroSrc}
-          poster={study.heroPoster}
-          autoPlay
-          muted
-          loop
-          playsInline
-          className={styles.heroMedia}
-          aria-label={study.heroAlt}
-        />
-      </figure>
-    );
-  }
-  if ((study.heroVariant === "gif" || study.heroVariant === "image") && study.heroSrc) {
-    return (
-      <figure className={styles.hero}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={study.heroSrc}
-          alt={study.heroAlt ?? ""}
-          className={styles.heroMedia}
-        />
-      </figure>
-    );
-  }
-  // placeholder
+function Snippets({ snippets }: { snippets: Snippet[] }) {
+  if (!snippets.length) return null;
   return (
-    <figure className={`${styles.hero} ${styles.heroPlaceholder}`}>
-      <span>{study.heroAlt ?? "HERO IMAGE"}</span>
-      <span className={styles.heroPlaceholderHint}>
-        teaser GIF or video lands here
-      </span>
+    <div className={styles.snippets}>
+      {snippets.map((snippet, i) => (
+        <SnippetBlock key={i} snippet={snippet} index={i} />
+      ))}
+    </div>
+  );
+}
+
+function SnippetBlock({ snippet, index }: { snippet: Snippet; index: number }) {
+  const aspect = snippet.aspect ?? "16 / 9";
+  return (
+    <figure className={styles.snippet}>
+      <div className={styles.snippetMedia} style={{ aspectRatio: aspect }}>
+        {snippet.variant === "video" && snippet.src ? (
+          <video
+            src={snippet.src}
+            poster={snippet.poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className={styles.media}
+            aria-label={snippet.alt}
+          />
+        ) : (snippet.variant === "gif" || snippet.variant === "image") && snippet.src ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={snippet.src} alt={snippet.alt ?? ""} className={styles.media} />
+        ) : (
+          <div className={styles.placeholder}>
+            <span className={styles.placeholderIndex}>
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span>{snippet.alt ?? "Snippet"}</span>
+            <span className={styles.placeholderHint}>2-3s loop lands here</span>
+          </div>
+        )}
+      </div>
+      {snippet.caption && <figcaption className={styles.caption}>{snippet.caption}</figcaption>}
     </figure>
   );
 }
@@ -106,34 +123,41 @@ function Stats({ study }: { study: CaseStudy }) {
   );
 }
 
-function Narrative({ study }: { study: CaseStudy }) {
+function ShortNarrative({ study }: { study: CaseStudy }) {
+  return <p className={styles.shortNarrative}>{study.shortNarrative}</p>;
+}
+
+function ReadMore({ study }: { study: CaseStudy }) {
+  const [open, setOpen] = useState(false);
+  if (!study.longNarrative) return null;
+  const paragraphs = study.longNarrative.split(/\n\s*\n/);
   return (
-    <div className={styles.narrative}>
-      <section className={styles.section}>
-        <h3>Problem</h3>
-        <p>{study.problem}</p>
-      </section>
-      <section className={styles.section}>
-        <h3>Approach</h3>
-        <p>{study.approach}</p>
-      </section>
-      <section className={styles.section}>
-        <h3>Outcome</h3>
-        <p>{study.outcome}</p>
-      </section>
+    <div className={styles.readMore}>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className={styles.readMoreToggle}
+        aria-expanded={open}
+      >
+        {open ? "Show less ↑" : "Read more ↓"}
+      </button>
+      {open && (
+        <div className={styles.readMoreBody}>
+          {paragraphs.map((p, i) => (
+            <p key={i}>{p}</p>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
 function LoomEmbed({ study }: { study: CaseStudy }) {
   if (!study.loomUrl) return null;
-  // Loom share URLs end in /share/ID; embed URL uses /embed/ID
-  const embedUrl = study.loomUrl
-    .replace("/share/", "/embed/")
-    .split("?")[0];
+  const embedUrl = study.loomUrl.replace("/share/", "/embed/").split("?")[0];
   return (
     <section className={styles.loom}>
-      <h3 className={styles.loomHead}>Walkthrough</h3>
+      <h3 className={styles.sectionHead}>Walkthrough</h3>
       <div className={styles.loomFrame}>
         <iframe
           src={embedUrl}
@@ -146,16 +170,46 @@ function LoomEmbed({ study }: { study: CaseStudy }) {
   );
 }
 
-function ExternalCta({ study }: { study: CaseStudy }) {
-  if (!study.externalLink) return null;
+function Footer({ study }: { study: CaseStudy }) {
+  const router = useRouter();
+  const hasCollaborators = study.collaborators && study.collaborators.length > 0;
   return (
-    <a
-      href={study.externalLink.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={styles.cta}
-    >
-      {study.externalLink.label} ↗
-    </a>
+    <footer className={styles.footer}>
+      {hasCollaborators && (
+        <div className={styles.collaborators}>
+          <h3 className={styles.sectionHead}>Worked with</h3>
+          <ul className={styles.collabList}>
+            {study.collaborators!.map((c, i) => (
+              <li key={i} className={styles.collabItem}>
+                <span className={styles.collabRole}>{c.role}</span>
+                <span className={styles.collabName}>{c.name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <div className={styles.footerRow}>
+        <button
+          type="button"
+          onClick={() => router.push("/")}
+          className={styles.footerLink}
+        >
+          ← Back to XMB
+        </button>
+        {study.externalLink && (
+          <a
+            href={study.externalLink.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.footerLink}
+          >
+            {study.externalLink.label} ↗
+          </a>
+        )}
+        <a href="mailto:hello@aether.studio" className={styles.footerLink}>
+          Contact ↗
+        </a>
+      </div>
+    </footer>
   );
 }

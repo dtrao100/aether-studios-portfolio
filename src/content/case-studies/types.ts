@@ -1,9 +1,25 @@
 export type Stat = {
-  value: string; // "38%", "$2.1M", "60%"
-  label: string; // "filing time cut", "ARR added", etc.
+  value: string;
+  label: string;
 };
 
-export type HeroVariant = "gif" | "video" | "image" | "placeholder";
+export type SnippetVariant = "gif" | "video" | "image" | "placeholder";
+
+export type Snippet = {
+  variant: SnippetVariant;
+  src?: string; // path under /public or external URL
+  poster?: string; // video poster
+  alt?: string;
+  /** Optional short caption shown beneath this snippet. */
+  caption?: string;
+  /** Display aspect: defaults to 16/9. Use "9/16" or "4/5" for portrait. */
+  aspect?: string;
+};
+
+export type Collaborator = {
+  role: string; // "VP Product"
+  name: string;
+};
 
 export type CaseStudy = {
   slug: string;
@@ -14,19 +30,19 @@ export type CaseStudy = {
   role: string; // "Lead product designer"
   tagline: string; // single sentence
 
-  heroVariant: HeroVariant;
-  heroSrc?: string; // path under /public, or external URL for video
-  heroAlt?: string;
-  heroPoster?: string; // for video — poster image
+  /** 2-4 stacked media moments — primary content of the case study. */
+  snippets: Snippet[];
 
-  stats?: Stat[]; // 0-4 stat chips below hero
+  stats?: Stat[];
 
-  /** Compact narrative — teaser style. 2-3 sentences max per section. */
-  problem: string;
-  approach: string;
-  outcome: string;
+  /** 1-2 short sentences total, shown directly. */
+  shortNarrative: string;
 
-  /** Optional Loom / YouTube walkthrough — embedded after the narrative. */
+  /** Optional expanded narrative behind a "Read more" toggle. Newline-separated paragraphs. */
+  longNarrative?: string;
+
+  collaborators?: Collaborator[];
+
   loomUrl?: string;
   externalLink?: { label: string; href: string };
 
