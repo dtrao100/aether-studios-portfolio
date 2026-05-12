@@ -102,10 +102,12 @@ export const FRAGMENT_SHADER = /* glsl */ `
     float bodyFar   = pow(1.0 - clamp(meanD / 0.140, 0.0, 1.0), 3.0) * 0.12;
     float body = bodyInner + bodyOuter + bodyFar;
 
-    // Body dominates; strands contribute mild texture only. Reference reads
-    // as a soft wispy ribbon — distinct strand lines would feel wrong.
+    // Body dominates; strands contribute braiding texture as bright thin
+    // veins running through the body band. Reference shows visible strand
+    // detail within the wispy ribbon, just not as bright as the body.
     float strandsMax = max(max(max(r1, r2), max(r3, r4)), r5);
-    float ribbonI = body + strandsMax * 0.18;
+    float strandsSum = (r1 + r2 + r3 + r4 + r5) * 0.04;
+    float ribbonI = body + strandsMax * 0.28 + strandsSum;
 
     // Alpha falloff along X: brighter on the left, tapers toward the right
     // but still reaches the right edge with significant brightness. The
