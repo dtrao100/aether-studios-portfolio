@@ -78,25 +78,27 @@ export const FRAGMENT_SHADER = /* glsl */ `
     float d4 = strand(uv, t * 1.02, 2.5, 0.062, 4.2,  anchorY + 0.020,  slope);
     float d5 = strand(uv, t * 0.97, 1.7, 0.054, 5.6,  anchorY - 0.018,  slope);
 
-    float r1 = ribbon(d1, 0.012);
-    float r2 = ribbon(d2, 0.010);
-    float r3 = ribbon(d3, 0.009);
-    float r4 = ribbon(d4, 0.009);
-    float r5 = ribbon(d5, 0.008);
+    // Strands are subtle highlights INSIDE the body band, not the primary
+    // visible element. The reference reads as one unified ribbon with
+    // braiding texture, so body dominates and strands are bright veins.
+    float r1 = ribbon(d1, 0.010);
+    float r2 = ribbon(d2, 0.009);
+    float r3 = ribbon(d3, 0.008);
+    float r4 = ribbon(d4, 0.008);
+    float r5 = ribbon(d5, 0.007);
 
-    // Wide diffuse "smoke" body. This is what gives the wave its substantial
-    // vertical thickness. Reference frames show the wave as a clearly thick
-    // band of light, not just a few thin strands.
+    // Wide diffuse smoke body — DOMINANT visual element. Three-zone
+    // falloff (inner solid + outer fade + far halo) for the soft thick
+    // ribbon shape.
     float bodyD = min(d1, min(d2, min(d3, min(d4, d5))));
-    float bodyInner = pow(1.0 - clamp(bodyD / 0.045, 0.0, 1.0), 1.8) * 0.55;
-    float bodyOuter = pow(1.0 - clamp(bodyD / 0.110, 0.0, 1.0), 2.8) * 0.22;
-    float body = bodyInner + bodyOuter;
+    float bodyInner = pow(1.0 - clamp(bodyD / 0.035, 0.0, 1.0), 1.5) * 0.80;
+    float bodyOuter = pow(1.0 - clamp(bodyD / 0.090, 0.0, 1.0), 2.4) * 0.35;
+    float bodyFar   = pow(1.0 - clamp(bodyD / 0.150, 0.0, 1.0), 3.0) * 0.12;
+    float body = bodyInner + bodyOuter + bodyFar;
 
-    // Composite: max picks the brightest strand at each pixel (preserves the
-    // visible braiding) + summed soft contribution + body band underneath
+    // Body dominates; strands add subtle bright-vein texture for braiding.
     float strandsMax = max(max(max(r1, r2), max(r3, r4)), r5);
-    float strandsSum = (r1 + r2 + r3 + r4 + r5) * 0.06;
-    float ribbonI = strandsMax * 0.85 + strandsSum + body;
+    float ribbonI = body + strandsMax * 0.30;
 
     // Alpha falloff along X: bright on the left, tapers toward the right.
     // Steeper exponent gives a clearer "ribbon fades out" effect matching

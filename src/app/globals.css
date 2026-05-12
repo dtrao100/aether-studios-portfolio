@@ -26,16 +26,11 @@ html, body {
 body {
   color: var(--fg);
   background:
-    radial-gradient(
-      ellipse 45% 30% at 8% 65%,
-      color-mix(in srgb, var(--bg-center) 100%, white 5%) 0%,
-      transparent 75%
-    ),
     linear-gradient(
       to bottom,
       var(--bg-edge) 0%,
-      color-mix(in srgb, var(--bg-edge) 80%, var(--bg-center) 20%) 30%,
-      color-mix(in srgb, var(--bg-edge) 40%, var(--bg-center) 60%) 65%,
+      color-mix(in srgb, var(--bg-edge) 88%, var(--bg-center) 12%) 35%,
+      color-mix(in srgb, var(--bg-edge) 55%, var(--bg-center) 45%) 75%,
       var(--bg-center) 100%
     );
   font-family: "SCE-PS3 Rodin LATIN Regular", -apple-system, BlinkMacSystemFont,
