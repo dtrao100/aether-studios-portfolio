@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { FRAGMENT_SHADER, VERTEX_SHADER } from "@/lib/shader";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { computeTint, getActiveTheme, type ThemeId } from "@/lib/theme";
+import { applyBgCss, computeBg, computeTint, getActiveTheme, type ThemeId } from "@/lib/theme";
 
 export function WaveBackground() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -92,11 +92,22 @@ export function WaveBackground() {
     let frozenT = 0;
     let renderedFrozenFrame = false;
     let raf = 0;
+    let bgUpdateCounter = 0;
+
+    // initial bg apply
+    const initBg = computeBg(themeRef.current, 0);
+    applyBgCss(initBg.center, initBg.edge);
 
     const frame = (t: number) => {
       const isReduced = reducedRef.current;
       const sec = t * 0.001;
       const [r, g, b] = computeTint(themeRef.current, isReduced ? frozenT : sec);
+      // throttle bg CSS variable updates to ~10Hz — paint, not layout, so cheap,
+      // but no need for 60Hz updates on a 90s cycle
+      if (++bgUpdateCounter % 6 === 0) {
+        const bg = computeBg(themeRef.current, isReduced ? frozenT : sec);
+        applyBgCss(bg.center, bg.edge);
+      }
       if (isReduced) {
         if (!renderedFrozenFrame) {
           gl.clear(gl.COLOR_BUFFER_BIT);
