@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { FRAGMENT_SHADER, VERTEX_SHADER } from "@/lib/shader";
+import { useEffect, useRef, useState } from "react";
+import { VERTEX_SHADER, VARIANTS, getActiveVariant, type WaveVariantId } from "@/lib/shader-variants";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useIdleCursor } from "@/hooks/useIdleCursor";
 import { applyBgCss, computeBg, computeTint, getActiveTheme, type ThemeId } from "@/lib/theme";
@@ -12,10 +12,22 @@ export function WaveBackground() {
   const reducedMotion = useReducedMotion();
   const reducedRef = useRef(reducedMotion);
   const themeRef = useRef<ThemeId>("drift");
+  const [variant, setVariant] = useState<WaveVariantId>("braided");
 
   useEffect(() => {
     reducedRef.current = reducedMotion;
   }, [reducedMotion]);
+
+  // Hydrate active variant from URL/localStorage, listen for changes.
+  useEffect(() => {
+    setVariant(getActiveVariant());
+    const onChange = (e: Event) => {
+      const detail = (e as CustomEvent<WaveVariantId>).detail;
+      if (detail) setVariant(detail);
+    };
+    window.addEventListener("aether-wave-variant-change", onChange);
+    return () => window.removeEventListener("aether-wave-variant-change", onChange);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -50,8 +62,9 @@ export function WaveBackground() {
       return s;
     };
 
+    const fragmentSrc = VARIANTS[variant].fragment;
     const vs = compile(VERTEX_SHADER, gl.VERTEX_SHADER);
-    const fs = compile(FRAGMENT_SHADER, gl.FRAGMENT_SHADER);
+    const fs = compile(fragmentSrc, gl.FRAGMENT_SHADER);
     if (!vs || !fs) return;
 
     const program = gl.createProgram();
@@ -72,7 +85,6 @@ export function WaveBackground() {
     const uRes = gl.getUniformLocation(program, "uResolution");
     const uTint = gl.getUniformLocation(program, "uTint");
 
-    // hydrate theme from localStorage, listen for changes
     themeRef.current = getActiveTheme();
     const onThemeChange = (e: Event) => {
       const detail = (e as CustomEvent<ThemeId>).detail;
@@ -96,7 +108,6 @@ export function WaveBackground() {
     let raf = 0;
     let bgUpdateCounter = 0;
 
-    // initial bg apply
     const initBg = computeBg(themeRef.current, 0);
     applyBgCss(initBg.center, initBg.edge);
 
@@ -104,8 +115,6 @@ export function WaveBackground() {
       const isReduced = reducedRef.current;
       const sec = t * 0.001;
       const [r, g, b] = computeTint(themeRef.current, isReduced ? frozenT : sec);
-      // throttle bg CSS variable updates to ~10Hz — paint, not layout, so cheap,
-      // but no need for 60Hz updates on a 90s cycle
       if (++bgUpdateCounter % 6 === 0) {
         const bg = computeBg(themeRef.current, isReduced ? frozenT : sec);
         applyBgCss(bg.center, bg.edge);
@@ -141,7 +150,7 @@ export function WaveBackground() {
       gl.deleteShader(fs);
       gl.deleteBuffer(buf);
     };
-  }, []);
+  }, [variant]);
 
   return (
     <canvas

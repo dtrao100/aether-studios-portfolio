@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { WaveBackground } from "@/components/WaveBackground";
 import { Sparkles } from "@/components/Sparkles";
+import { WaveVariantPicker } from "@/components/WaveVariantPicker";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -31,6 +32,7 @@ export default function RootLayout({
          */}
         <WaveBackground />
         <Sparkles />
+        <WaveVariantPicker />
         {children}
       </body>
     </html>
