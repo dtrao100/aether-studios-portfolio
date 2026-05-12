@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --bg-edge: #02061a;
-  --bg-center: #0e2870;
+  --bg-edge: #000D5C;
+  --bg-center: #2B4AAB;
   --fg: #f5f5f5;
 }
 
@@ -15,33 +15,28 @@ html, body {
 }
 
 /**
- * PS3 dashboard background: a horizontal "lit band" where the wave flows,
- * fading to darker top and bottom. Layered effects:
- *   1) Vertical gradient — sets the overall darker-top, darker-bottom tone
- *   2) Horizontal radial — adds a slight glow on the left where the wave
- *      sources from (matches the reference frame's "head" lighting)
- *   3) Vignette — slight corner darkening for depth
+ * PS3 dashboard background. Pixel sampling of the reference video shows:
+ *   - Top is DARKEST (deep navy #000D5C)
+ *   - Bottom is BRIGHTEST (#2B4AAB)
+ *   - Slight extra brightness on bottom-left where the wave head sources
+ *
+ * So this is a linear top→bottom dark→bright gradient with a soft radial
+ * lift at bottom-left for the head glow.
  */
 body {
   color: var(--fg);
   background:
     radial-gradient(
-      ellipse 60% 35% at 20% 52%,
-      color-mix(in srgb, var(--bg-center) 100%, white 6%) 0%,
-      var(--bg-center) 35%,
-      transparent 90%
-    ),
-    radial-gradient(
-      ellipse 140% 100% at 50% 100%,
-      var(--bg-edge) 0%,
-      transparent 70%
+      ellipse 50% 35% at 10% 85%,
+      color-mix(in srgb, var(--bg-center) 100%, white 4%) 0%,
+      transparent 80%
     ),
     linear-gradient(
       to bottom,
       var(--bg-edge) 0%,
-      var(--bg-center) 45%,
-      var(--bg-center) 55%,
-      var(--bg-edge) 100%
+      color-mix(in srgb, var(--bg-edge) 75%, var(--bg-center) 25%) 35%,
+      color-mix(in srgb, var(--bg-edge) 35%, var(--bg-center) 65%) 70%,
+      var(--bg-center) 100%
     );
   font-family: "SCE-PS3 Rodin LATIN Regular", -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, sans-serif;

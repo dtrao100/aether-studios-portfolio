@@ -24,46 +24,55 @@ export type ThemePalette = {
 const STORAGE_KEY = "aether_theme";
 
 /**
- * Background colors match the PS3 dashboard reference: the bg carries the
- * theme hue, the wave reads as white over it. Center is the "lit" middle
- * band (where the wave sits) and edge is the darker corner vignette.
- * Increased saturation vs. the earlier muted values so the theme reads
- * clearly without needing the wave to be tinted.
+ * Background palette derived from pixel-sampling the actual PS3 dashboard
+ * reference video. The bg has a TOP→BOTTOM dark-to-bright gradient (not
+ * center-out radial), plus slight left-side brightness boost from the
+ * wave's head glow.
+ *
+ *   bgEdge   = top color (darkest)
+ *   bgCenter = bottom color (brightest)
+ *
+ * Measured navy values (from frame_006.5s):
+ *   top    #000D5C  rgb(0,13,92)
+ *   mid    #00146E  rgb(0,20,110)
+ *   bottom #2B4AAB  rgb(43,74,171)
+ *
+ * Other themes derived by hue-shifting these reference points.
  */
 export const THEMES: Record<Exclude<ThemeId, "drift">, ThemePalette> = {
   gray:   {
     id: "gray", label: "Original Gray",
     note: "The XMB's neutral, pre-firmware-3 tone.",
     rgb: [0.55, 0.55, 0.58],
-    bgCenter: "#3a3a40", bgEdge: "#0c0c10",
+    bgEdge: "#1c1c20", bgCenter: "#4a4a52",
     swatch: "linear-gradient(135deg, #6b6b6b, #2a2a2a)",
   },
   blue: {
     id: "blue", label: "Launch Blue",
     note: "The PS3 launch theme. Deep, cinematic.",
     rgb: [0.30, 0.50, 0.80],
-    bgCenter: "#1a3580", bgEdge: "#040a24",
+    bgEdge: "#001870", bgCenter: "#3258BB",
     swatch: "linear-gradient(135deg, #2b4cc8, #0d2270)",
   },
   indigo: {
     id: "indigo", label: "Indigo",
     note: "Twilight register. Warmer at low brightness.",
     rgb: [0.42, 0.32, 0.72],
-    bgCenter: "#36206a", bgEdge: "#0a0418",
+    bgEdge: "#1c0860", bgCenter: "#5638B0",
     swatch: "linear-gradient(135deg, #6b48b9, #2d1e6a)",
   },
   navy: {
     id: "navy", label: "Deep Navy",
     note: "The reference frame's hue. Classic PS3.",
     rgb: [0.18, 0.30, 0.62],
-    bgCenter: "#0e2870", bgEdge: "#02061a",
+    bgEdge: "#000D5C", bgCenter: "#2B4AAB",
     swatch: "linear-gradient(135deg, #2e4894, #0a1640)",
   },
   warm: {
     id: "warm", label: "Warm Gray",
     note: "Slight ochre cast. Desk-lamp light at 11pm.",
     rgb: [0.62, 0.55, 0.50],
-    bgCenter: "#3a2c20", bgEdge: "#100a06",
+    bgEdge: "#1c150c", bgCenter: "#52402e",
     swatch: "linear-gradient(135deg, #9e8f7e, #3c3024)",
   },
 };

@@ -47,76 +47,97 @@ export const FRAGMENT_SHADER = /* glsl */ `
   }
 
   // Soft ribbon intensity at a given distance with a given core thickness.
-  // Two-zone falloff: a bright core (sharp) plus a wider halo (gentle).
-  // This matches the PS3 reference where each strand has a thin bright
-  // centerline plus a soft surrounding glow.
+  // Three-zone falloff: bright core line + tight halo + wider soft halo.
+  // The reference shows each strand has a hairline bright center with a
+  // significant SOFT glow around it — not crisp wireframe lines.
   float ribbon(float d, float core) {
-    float coreI = pow(1.0 - clamp(d / core, 0.0, 1.0), 1.4);
-    float halo  = pow(1.0 - clamp(d / (core * 3.5), 0.0, 1.0), 2.0) * 0.55;
-    return coreI + halo;
+    float coreI = pow(1.0 - clamp(d / core, 0.0, 1.0), 1.2);
+    float halo  = pow(1.0 - clamp(d / (core * 5.0), 0.0, 1.0), 2.0) * 0.55;
+    float soft  = pow(1.0 - clamp(d / (core * 9.0), 0.0, 1.0), 2.5) * 0.20;
+    return coreI + halo + soft;
   }
 
   void main() {
     vec2 uv = gl_FragCoord.xy / uResolution;
     float t = uTime * 0.35;
 
-    // The ribbon's "anchor" Y drifts slowly so the whole wave breathes
-    float anchorY = 0.50 + sin(uTime * 0.08) * 0.05;
+    // The ribbon's "anchor" Y drifts slowly. Anchor closer to upper-middle
+    // (0.55 in gl_FragCoord coords = upper half on screen since Y is flipped).
+    float anchorY = 0.55 + sin(uTime * 0.08) * 0.06;
     // Slope drifts so the wave flows uphill, flat, then downhill across long
     // timescales (matches the PS3 reference's variable slope across frames).
-    float slope = sin(uTime * 0.05) * 0.14;
+    float slope = sin(uTime * 0.05) * 0.20;
 
-    // 3 braided strands at slightly different phases. Critically, all strands
-    // share the SAME slope and very close base Y values so they cluster into
-    // a tight braided band rather than fanning apart — matches the PS3
-    // reference where the wave reads as a single intertwined ribbon.
-    float d1 = strand(uv, t,        2.4, 0.045, 0.0,  anchorY,          slope);
-    float d2 = strand(uv, t * 1.05, 2.7, 0.038, 1.4,  anchorY + 0.006,  slope);
-    float d3 = strand(uv, t * 0.95, 2.1, 0.032, 2.9,  anchorY - 0.005,  slope);
+    // 5 thin braided strands at slightly different phases and vertical
+    // offsets. Wider Y offsets (combined with the body band fill) give the
+    // wave its ribbon thickness — reference shows the wave occupying
+    // ~20% of screen height, not a thin horizontal line.
+    float d1 = strand(uv, t,        2.0, 0.075, 0.0,  anchorY,          slope);
+    float d2 = strand(uv, t * 1.06, 2.3, 0.068, 1.3,  anchorY + 0.018,  slope);
+    float d3 = strand(uv, t * 0.94, 1.8, 0.058, 2.7,  anchorY - 0.016,  slope);
+    float d4 = strand(uv, t * 1.02, 2.5, 0.062, 4.2,  anchorY + 0.030,  slope);
+    float d5 = strand(uv, t * 0.97, 1.7, 0.054, 5.6,  anchorY - 0.028,  slope);
 
-    float r1 = ribbon(d1, 0.018);
-    float r2 = ribbon(d2, 0.014);
-    float r3 = ribbon(d3, 0.012);
+    float r1 = ribbon(d1, 0.010);
+    float r2 = ribbon(d2, 0.009);
+    float r3 = ribbon(d3, 0.008);
+    float r4 = ribbon(d4, 0.008);
+    float r5 = ribbon(d5, 0.007);
 
-    // composite strands (max picks the brightest strand at each pixel, which
-    // gives the "braided over each other" look rather than just adding bands)
-    float ribbonI = max(max(r1, r2), r3) * 0.85 + (r1 + r2 + r3) * 0.05;
+    // Wide diffuse "body band" — fills the space between strands so they
+    // read as a single thick wisp rather than 5 stacked lines. Reference
+    // wave is 100-150px tall at full brightness regions.
+    float bodyD = min(d1, min(d2, min(d3, min(d4, d5))));
+    float body = pow(1.0 - clamp(bodyD / 0.085, 0.0, 1.0), 2.0) * 0.55;
+
+    // Composite: max picks the brightest strand at each pixel (preserves the
+    // visible braiding) + summed soft contribution + body band underneath
+    float strandsMax = max(max(max(r1, r2), max(r3, r4)), r5);
+    float strandsSum = (r1 + r2 + r3 + r4 + r5) * 0.06;
+    float ribbonI = strandsMax * 0.85 + strandsSum + body;
 
     // Alpha falloff along X: bright on the left, tapers toward the right.
-    // Slight head boost at the very left edge.
-    float xFalloff = pow(1.0 - uv.x, 1.2);   // 1.0 at left → 0.0 at right
+    // Steeper exponent gives a clearer "ribbon fades out" effect matching
+    // the reference, where the right end is nearly invisible by mid-screen.
+    float xFalloff = pow(1.0 - uv.x, 1.8);   // 1.0 at left → 0.0 at right
     xFalloff = clamp(xFalloff, 0.0, 1.0);
 
     // Head glow: bright radial blob just on-screen at the left, sitting on
     // the ribbon's anchor line. This is the "source" where the ribbon
     // emerges from and where sparkles cluster.
-    float headSlope = slope * (0.05 - 0.5);
-    vec2 headPos = vec2(0.05, anchorY + headSlope);
+    float headSlope = slope * (0.08 - 0.5);
+    vec2 headPos = vec2(0.08, anchorY + headSlope);
     // Aspect-corrected distance (without this, the head reads as a horizontal
     // ellipse on widescreen)
     vec2 aspect = vec2(uResolution.x / uResolution.y, 1.0);
     float headDist = distance(uv * aspect, headPos * aspect);
-    float head = exp(-headDist * 22.0) * 0.95;    // tight bright core
-    head += exp(-headDist * 10.0) * 0.35;         // medium halo
-    head += exp(-headDist * 4.5) * 0.10;          // soft bloom
+    // Multi-zone glow matching the reference's bright source point
+    float head = exp(-headDist * 32.0) * 1.20;    // ultra-tight bright nucleus
+    head += exp(-headDist * 14.0) * 0.55;         // tight halo
+    head += exp(-headDist * 6.0) * 0.22;          // medium glow
+    head += exp(-headDist * 2.5) * 0.08;          // soft outer bloom
 
-    // Sparkle field: pseudo-random points that flicker. Density falls off with
-    // X just like the ribbon, and intensifies near the head.
-    vec2 sparkleUV = uv * vec2(180.0, 100.0);
+    // Sparkle field: pseudo-random bright points clustered near the head and
+    // along the ribbon. The reference shows a TIGHT CLUSTER of small white
+    // dots immediately around the source point, with a few scattered along
+    // the wave path.
+    vec2 sparkleUV = uv * vec2(220.0, 130.0);
     vec2 sparkleId = floor(sparkleUV);
     vec2 sparkleFrac = fract(sparkleUV) - 0.5;
     float sparkleSeed = hash21(sparkleId);
-    float sparkleVis = step(0.985, sparkleSeed); // very sparse
-    float sparkleFlicker = 0.5 + 0.5 * sin(uTime * (1.0 + sparkleSeed * 4.0) + sparkleSeed * 6.28);
-    float sparkleShape = exp(-dot(sparkleFrac, sparkleFrac) * 60.0);
+    float sparkleVis = step(0.978, sparkleSeed); // slightly denser
+    float sparkleFlicker = 0.4 + 0.6 * sin(uTime * (1.0 + sparkleSeed * 4.0) + sparkleSeed * 6.28);
+    float sparkleShape = exp(-dot(sparkleFrac, sparkleFrac) * 55.0);
     float sparkleField = sparkleVis * sparkleShape * sparkleFlicker;
-    // weight sparkles by proximity to ribbon AND to head
-    float sparkleWeight = ribbonI * 1.2 + head * 1.5 + 0.12;
+    // Heavy weighting near the head (dominant cluster) plus light spread
+    // along the ribbon path
+    float headProx = exp(-headDist * 4.0);
+    float sparkleWeight = ribbonI * 0.8 + head * 2.0 + headProx * 1.2 + 0.08;
     sparkleWeight *= xFalloff;
-    float sparkles = sparkleField * sparkleWeight * 3.5;
+    float sparkles = sparkleField * sparkleWeight * 4.2;
 
     // Total white intensity
-    float intensity = ribbonI * xFalloff * 1.1 + head + sparkles;
+    float intensity = ribbonI * xFalloff * 0.65 + head + sparkles;
     intensity = clamp(intensity, 0.0, 1.0);
 
     if (intensity <= 0.01) discard;
@@ -125,6 +146,6 @@ export const FRAGMENT_SHADER = /* glsl */ `
     // Slight tint bleed (~10%) so the wave doesn't feel surgically detached
     // from the theme — keeps it cohesive with the background gradient.
     vec3 col = mix(vec3(1.0), uTint, 0.12);
-    gl_FragColor = vec4(col * intensity, intensity * 0.92);
+    gl_FragColor = vec4(col * intensity, intensity * 0.82);
   }
 `;
