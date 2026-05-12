@@ -197,18 +197,19 @@
 
 /* Vertical items column for the active category.
  *
- * PS3 behavior: items above the active row remain visible — they pass
- * BEHIND the category icon row as the list scrolls up, fading naturally
- * toward the top of the screen. They do not disappear at the category-row
- * line. So the mask is now just a gentle top-edge fade-out so the scrolled
- * items dissolve at the screen's top rather than being clipped by a hard
- * boundary at the category bar.
+ * Real PS3 behavior (verified against mustafaHTP/docs/menu.gif): items
+ * above the active row appear ABOVE the category bar at the very top of
+ * the screen. The CROSSBAR ZONE ITSELF stays clean — items do not bleed
+ * through it. There's a clear visual "jump" where items appear above the
+ * crossbar with no item visible in the crossbar's horizontal strip.
  *
- * The viewport extends ALL the way to the top of the screen (top: 0) so
- * items can render in the same vertical space as the category bar. The
- * category bar has higher z-index so its icons cover items behind them,
- * but the empty space between/around icons stays transparent — items
- * passing through that space are visible.
+ * So the mask has THREE bands:
+ *   0-12vh:   visible (items that scrolled above the crossbar)
+ *   12-50vh:  hidden (crossbar zone + buffer above and below)
+ *   50-100vh: visible (active item + items below)
+ *
+ * With ITEM_GAP=98px (~9vh), items 5+ steps above the active row reach
+ * the upper-visible band naturally.
  */
 .itemViewport {
   position: absolute;
@@ -221,15 +222,27 @@
   -webkit-mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.4) 6%,
-    rgba(0, 0, 0, 1) 14%,
+    rgba(0, 0, 0, 0.5) 3%,
+    rgba(0, 0, 0, 1) 6%,
+    rgba(0, 0, 0, 1) 13%,
+    rgba(0, 0, 0, 0.5) 16%,
+    rgba(0, 0, 0, 0) 20%,
+    rgba(0, 0, 0, 0) 46%,
+    rgba(0, 0, 0, 0.5) 49%,
+    rgba(0, 0, 0, 1) 52%,
     rgba(0, 0, 0, 1) 100%
   );
   mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0.4) 6%,
-    rgba(0, 0, 0, 1) 14%,
+    rgba(0, 0, 0, 0.5) 3%,
+    rgba(0, 0, 0, 1) 6%,
+    rgba(0, 0, 0, 1) 13%,
+    rgba(0, 0, 0, 0.5) 16%,
+    rgba(0, 0, 0, 0) 20%,
+    rgba(0, 0, 0, 0) 46%,
+    rgba(0, 0, 0, 0.5) 49%,
+    rgba(0, 0, 0, 1) 52%,
     rgba(0, 0, 0, 1) 100%
   );
 }
@@ -243,11 +256,12 @@
   flex-direction: column;
   gap: 18px;
   will-change: transform;
-  /* Anchor first item at the "active row" — vertically just below the
-   * category bar (which sits at top: 24vh with ~20vh height). 42vh keeps
-   * the active row in the same position as the previous layout while
-   * letting items scroll naturally up past the bar. */
-  padding-top: 42vh;
+  /* Anchor first item at the "active row" position, just below the mask's
+   * hidden zone. The category bar lives in 24-44vh; we leave a buffer and
+   * start items at 50vh so the active row reads as clearly separated from
+   * the crossbar (matches the PS3 reference's gap between crossbar and
+   * first item below). */
+  padding-top: 50vh;
 }
 
 .item {
