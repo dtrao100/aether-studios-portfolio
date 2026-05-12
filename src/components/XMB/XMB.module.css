@@ -45,6 +45,9 @@
   width: 100vw;
   height: 220px;
   pointer-events: none;
+  /* sits above the items track so items passing above can be naturally
+   * occluded by category icons */
+  z-index: 2;
 }
 
 .categoryTrack {
@@ -192,31 +195,42 @@
   font-size: 17px;
 }
 
-/* vertical items column for active category — items pass through/above the category bar */
+/* Vertical items column for the active category.
+ *
+ * PS3 behavior: items above the active row remain visible — they pass
+ * BEHIND the category icon row as the list scrolls up, fading naturally
+ * toward the top of the screen. They do not disappear at the category-row
+ * line. So the mask is now just a gentle top-edge fade-out so the scrolled
+ * items dissolve at the screen's top rather than being clipped by a hard
+ * boundary at the category bar.
+ *
+ * The viewport extends ALL the way to the top of the screen (top: 0) so
+ * items can render in the same vertical space as the category bar. The
+ * category bar has higher z-index so its icons cover items behind them,
+ * but the empty space between/around icons stays transparent — items
+ * passing through that space are visible.
+ */
 .itemViewport {
   position: absolute;
-  top: 22vh;
+  top: 0;
   left: 28%;
   right: 32px;
-  height: 70vh;
+  height: 100vh;
   overflow: hidden;
   pointer-events: none;
-  /* mask: fade items out as they cross above the category bar zone (top ~20vh) */
   -webkit-mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0) 22%,
-    rgba(0, 0, 0, 0.4) 26%,
-    rgba(0, 0, 0, 0.95) 30%,
-    rgba(0, 0, 0, 1) 33%
+    rgba(0, 0, 0, 0.4) 6%,
+    rgba(0, 0, 0, 1) 14%,
+    rgba(0, 0, 0, 1) 100%
   );
   mask-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0) 22%,
-    rgba(0, 0, 0, 0.4) 26%,
-    rgba(0, 0, 0, 0.95) 30%,
-    rgba(0, 0, 0, 1) 33%
+    rgba(0, 0, 0, 0.4) 6%,
+    rgba(0, 0, 0, 1) 14%,
+    rgba(0, 0, 0, 1) 100%
   );
 }
 
@@ -229,8 +243,11 @@
   flex-direction: column;
   gap: 18px;
   will-change: transform;
-  /* anchor first item at the "active row" position — vertically below the category bar */
-  padding-top: 20vh;
+  /* Anchor first item at the "active row" — vertically just below the
+   * category bar (which sits at top: 24vh with ~20vh height). 42vh keeps
+   * the active row in the same position as the previous layout while
+   * letting items scroll naturally up past the bar. */
+  padding-top: 42vh;
 }
 
 .item {
