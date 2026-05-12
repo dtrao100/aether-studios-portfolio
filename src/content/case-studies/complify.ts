@@ -12,8 +12,9 @@ export const complify: CaseStudy = {
 
   snippets: [
     {
-      variant: "gif",
-      src: "/case-studies/complify/complify-wizard.gif",
+      variant: "video",
+      src: "/case-studies/complify/complify-wizard.mp4",
+      poster: "/case-studies/complify/complify-wizard.png",
       alt: "Wizard-based audit spec setup walkthrough",
       caption:
         "Wizard-based audit spec setup: control type → details → test plan → sampling. Auditors don't think in configurable nodes, they think in sequential steps.",

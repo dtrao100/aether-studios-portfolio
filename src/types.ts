@@ -1,4 +1,4 @@
-export type ItemKind = "case-study" | "project" | "writing" | "music" | "game" | "photo" | "setting" | "about-section";
+export type ItemKind = "case-study" | "project" | "writing" | "music" | "setting" | "about-section";
 
 export type Item = {
   id: string;

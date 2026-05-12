@@ -38,10 +38,10 @@ export const CATEGORIES: Category[] = [
     title: "Projects",
     icon: "/icons/Icons.36.png",
     items: [
-      { id: "aether-gazette", title: "Æther Gazette", subtitle: "Side project", icon: "/icons/Icons.40.png", kind: "project", href: "/projects/aether-gazette", status: "coming-soon" },
-      { id: "amazing-digital-library", title: "Amazing Digital Library", subtitle: "Side project", icon: "/icons/Icons.40.png", kind: "project", href: "/projects/amazing-digital-library", status: "coming-soon" },
-      { id: "study", title: "Study", subtitle: "Side project", icon: "/icons/Icons.40.png", kind: "project", href: "/projects/study", status: "coming-soon" },
-      { id: "digital-mailbox", title: "Digital Mailbox", subtitle: "Side project", icon: "/icons/Icons.40.png", kind: "project", href: "/projects/digital-mailbox", status: "coming-soon" },
+      { id: "aether-gazette", title: "Æther Gazette", subtitle: "Publication", icon: "/icons/Icons.40.png", kind: "project", href: "/projects/aether-gazette", status: "live" },
+      { id: "amazing-digital-library", title: "Amazing Digital Library", subtitle: "Reference index", icon: "/icons/Icons.40.png", kind: "project", href: "/projects/amazing-digital-library", status: "live" },
+      { id: "study", title: "Study", subtitle: "Spaced repetition for designers", icon: "/icons/Icons.40.png", kind: "project", href: "/projects/study", status: "live" },
+      { id: "digital-mailbox", title: "Digital Mailbox", subtitle: "Inbox-shaped reader", icon: "/icons/Icons.40.png", kind: "project", href: "/projects/digital-mailbox", status: "live" },
     ],
   },
   {
@@ -59,32 +59,7 @@ export const CATEGORIES: Category[] = [
     title: "Music",
     icon: "/icons/Icons.16.png",
     items: [
-      { id: "album-1", title: "Album One", subtitle: "Placeholder", icon: "/icons/Icons.16.png", kind: "music", status: "coming-soon" },
-      { id: "album-2", title: "Album Two", subtitle: "Placeholder", icon: "/icons/Icons.16.png", kind: "music", status: "coming-soon" },
-      { id: "album-3", title: "Album Three", subtitle: "Placeholder", icon: "/icons/Icons.16.png", kind: "music", status: "coming-soon" },
-      { id: "album-4", title: "Album Four", subtitle: "Placeholder", icon: "/icons/Icons.16.png", kind: "music", status: "coming-soon" },
-      { id: "album-5", title: "Album Five", subtitle: "Placeholder", icon: "/icons/Icons.16.png", kind: "music", status: "coming-soon" },
-    ],
-  },
-  {
-    id: "games",
-    title: "Games",
-    icon: "/icons/Icons.39.png",
-    items: [
-      { id: "lol", title: "League of Legends", subtitle: "Rengar main", icon: "/icons/Icons.39.png", kind: "game", status: "coming-soon" },
-      { id: "game-2", title: "Game Two", subtitle: "Placeholder", icon: "/icons/Icons.39.png", kind: "game", status: "coming-soon" },
-      { id: "game-3", title: "Game Three", subtitle: "Placeholder", icon: "/icons/Icons.39.png", kind: "game", status: "coming-soon" },
-      { id: "game-4", title: "Game Four", subtitle: "Placeholder", icon: "/icons/Icons.39.png", kind: "game", status: "coming-soon" },
-      { id: "game-5", title: "Game Five", subtitle: "Placeholder", icon: "/icons/Icons.39.png", kind: "game", status: "coming-soon" },
-    ],
-  },
-  {
-    id: "photos",
-    title: "Photos",
-    icon: "/icons/Icons.1.png",
-    items: [
-      { id: "photo-1", title: "Photo One", subtitle: "Placeholder", icon: "/icons/Icons.1.png", kind: "photo", status: "coming-soon" },
-      { id: "photo-2", title: "Photo Two", subtitle: "Placeholder", icon: "/icons/Icons.1.png", kind: "photo", status: "coming-soon" },
+      { id: "ambient", title: "Wave (PS3 OST)", subtitle: "Ambient", icon: "/icons/Icons.16.png", kind: "music", href: "/music/ambient", status: "live" },
     ],
   },
 ];
