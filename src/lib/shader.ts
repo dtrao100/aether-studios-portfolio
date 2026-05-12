@@ -61,34 +61,36 @@ export const FRAGMENT_SHADER = /* glsl */ `
     vec2 uv = gl_FragCoord.xy / uResolution;
     float t = uTime * 0.35;
 
-    // The ribbon's "anchor" Y drifts slowly. Anchor closer to upper-middle
-    // (0.55 in gl_FragCoord coords = upper half on screen since Y is flipped).
-    float anchorY = 0.55 + sin(uTime * 0.08) * 0.06;
-    // Slope drifts so the wave flows uphill, flat, then downhill across long
-    // timescales (matches the PS3 reference's variable slope across frames).
-    float slope = sin(uTime * 0.05) * 0.20;
+    // The ribbon's "anchor" Y drifts slowly. gl_FragCoord has Y=0 at bottom,
+    // so 0.38 means ~62% down from the top of screen (matches reference where
+    // the wave sits in the lower-middle of the screen, head bottom-left).
+    float anchorY = 0.38 + sin(uTime * 0.08) * 0.08;
+    // Slope drifts more dramatically so the wave clearly arcs uphill/downhill
+    // across long timescales (reference shows obvious up-down curves).
+    float slope = sin(uTime * 0.05) * 0.28;
 
-    // 5 thin braided strands at slightly different phases and vertical
-    // offsets. Wider Y offsets (combined with the body band fill) give the
-    // wave its ribbon thickness — reference shows the wave occupying
-    // ~20% of screen height, not a thin horizontal line.
+    // 5 thin braided strands clustered tightly around the anchor. The body
+    // band underneath fills the ribbon's thickness; the strands act as
+    // bright structural highlights within that band.
     float d1 = strand(uv, t,        2.0, 0.075, 0.0,  anchorY,          slope);
-    float d2 = strand(uv, t * 1.06, 2.3, 0.068, 1.3,  anchorY + 0.018,  slope);
-    float d3 = strand(uv, t * 0.94, 1.8, 0.058, 2.7,  anchorY - 0.016,  slope);
-    float d4 = strand(uv, t * 1.02, 2.5, 0.062, 4.2,  anchorY + 0.030,  slope);
-    float d5 = strand(uv, t * 0.97, 1.7, 0.054, 5.6,  anchorY - 0.028,  slope);
+    float d2 = strand(uv, t * 1.06, 2.3, 0.068, 1.3,  anchorY + 0.012,  slope);
+    float d3 = strand(uv, t * 0.94, 1.8, 0.058, 2.7,  anchorY - 0.010,  slope);
+    float d4 = strand(uv, t * 1.02, 2.5, 0.062, 4.2,  anchorY + 0.020,  slope);
+    float d5 = strand(uv, t * 0.97, 1.7, 0.054, 5.6,  anchorY - 0.018,  slope);
 
-    float r1 = ribbon(d1, 0.010);
-    float r2 = ribbon(d2, 0.009);
-    float r3 = ribbon(d3, 0.008);
-    float r4 = ribbon(d4, 0.008);
-    float r5 = ribbon(d5, 0.007);
+    float r1 = ribbon(d1, 0.012);
+    float r2 = ribbon(d2, 0.010);
+    float r3 = ribbon(d3, 0.009);
+    float r4 = ribbon(d4, 0.009);
+    float r5 = ribbon(d5, 0.008);
 
-    // Wide diffuse "body band" — fills the space between strands so they
-    // read as a single thick wisp rather than 5 stacked lines. Reference
-    // wave is 100-150px tall at full brightness regions.
+    // Wide diffuse "smoke" body. This is what gives the wave its substantial
+    // vertical thickness. Reference frames show the wave as a clearly thick
+    // band of light, not just a few thin strands.
     float bodyD = min(d1, min(d2, min(d3, min(d4, d5))));
-    float body = pow(1.0 - clamp(bodyD / 0.085, 0.0, 1.0), 2.0) * 0.55;
+    float bodyInner = pow(1.0 - clamp(bodyD / 0.045, 0.0, 1.0), 1.8) * 0.55;
+    float bodyOuter = pow(1.0 - clamp(bodyD / 0.110, 0.0, 1.0), 2.8) * 0.22;
+    float body = bodyInner + bodyOuter;
 
     // Composite: max picks the brightest strand at each pixel (preserves the
     // visible braiding) + summed soft contribution + body band underneath
