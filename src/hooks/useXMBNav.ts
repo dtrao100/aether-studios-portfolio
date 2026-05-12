@@ -14,7 +14,10 @@ const RAMP_AFTER = 4;
 
 // overscroll phase timing (horizontal only — vertical stops at "pull")
 const CHARGE_AFTER_MS = 320;
-const ARMED_AFTER_MS = 320 + 1300; // 1620ms from press
+// Charge transition runs 1.3s. Add a 250ms "settled at thin" buffer before
+// the armed tremble kicks in so the charge gradient and tremble don't start
+// in the same frame (which reads as a snap).
+const ARMED_AFTER_MS = 320 + 1300 + 250; // 1870ms from press
 const SLINGSHOT_DURATION_MS = 2400;
 
 const KEY_TO_DIRECTION: Record<string, Direction | undefined> = {

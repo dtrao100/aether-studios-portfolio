@@ -93,45 +93,48 @@
   transform: scale(1.18) scaleY(0.85);
 }
 
+/* All armed keyframes start at translate(0, 0) to match the charge resting
+   position exactly. Tremble begins on the SECOND keyframe, ~50ms after armed
+   kicks in. Removes the visible "snap" at the charge-to-armed boundary. */
 @keyframes armed-edge {
-  0%   { transform: scaleY(0.85) translate(-0.46px, 0.16px); }
-  14%  { transform: scaleY(0.85) translate(0.38px, -0.22px); }
-  28%  { transform: scaleY(0.85) translate(-0.22px, 0.38px); }
-  42%  { transform: scaleY(0.85) translate(0.55px, -0.08px); }
-  57%  { transform: scaleY(0.85) translate(-0.38px, -0.30px); }
-  71%  { transform: scaleY(0.85) translate(0.16px, 0.22px); }
-  85%  { transform: scaleY(0.85) translate(-0.30px, -0.16px); }
-  100% { transform: scaleY(0.85) translate(0.46px, 0.30px); }
+  0%   { transform: scaleY(0.85) translate(0, 0); }
+  14%  { transform: scaleY(0.85) translate(-0.46px, 0.16px); }
+  28%  { transform: scaleY(0.85) translate(0.38px, -0.22px); }
+  42%  { transform: scaleY(0.85) translate(-0.22px, 0.38px); }
+  57%  { transform: scaleY(0.85) translate(0.55px, -0.08px); }
+  71%  { transform: scaleY(0.85) translate(-0.38px, -0.30px); }
+  85%  { transform: scaleY(0.85) translate(0.16px, 0.22px); }
+  100% { transform: scaleY(0.85) translate(-0.30px, -0.16px); }
 }
 @keyframes armed-near {
-  0%   { transform: scaleY(0.85) translate(-0.50px, 0.17px); }
-  14%  { transform: scaleY(0.85) translate(0.42px, -0.24px); }
-  28%  { transform: scaleY(0.85) translate(-0.24px, 0.42px); }
-  42%  { transform: scaleY(0.85) translate(0.60px, -0.09px); }
-  57%  { transform: scaleY(0.85) translate(-0.42px, -0.34px); }
-  71%  { transform: scaleY(0.85) translate(0.17px, 0.24px); }
-  85%  { transform: scaleY(0.85) translate(-0.34px, -0.17px); }
-  100% { transform: scaleY(0.85) translate(0.50px, 0.34px); }
+  0%   { transform: scaleY(0.85) translate(0, 0); }
+  14%  { transform: scaleY(0.85) translate(-0.50px, 0.17px); }
+  28%  { transform: scaleY(0.85) translate(0.42px, -0.24px); }
+  42%  { transform: scaleY(0.85) translate(-0.24px, 0.42px); }
+  57%  { transform: scaleY(0.85) translate(0.60px, -0.09px); }
+  71%  { transform: scaleY(0.85) translate(-0.42px, -0.34px); }
+  85%  { transform: scaleY(0.85) translate(0.17px, 0.24px); }
+  100% { transform: scaleY(0.85) translate(-0.34px, -0.17px); }
 }
 @keyframes armed-mid {
-  0%   { transform: scaleY(0.85) translate(-0.54px, 0.18px); }
-  14%  { transform: scaleY(0.85) translate(0.46px, -0.26px); }
-  28%  { transform: scaleY(0.85) translate(-0.26px, 0.46px); }
-  42%  { transform: scaleY(0.85) translate(0.65px, -0.10px); }
-  57%  { transform: scaleY(0.85) translate(-0.46px, -0.37px); }
-  71%  { transform: scaleY(0.85) translate(0.18px, 0.26px); }
-  85%  { transform: scaleY(0.85) translate(-0.37px, -0.18px); }
-  100% { transform: scaleY(0.85) translate(0.54px, 0.37px); }
+  0%   { transform: scaleY(0.85) translate(0, 0); }
+  14%  { transform: scaleY(0.85) translate(-0.54px, 0.18px); }
+  28%  { transform: scaleY(0.85) translate(0.46px, -0.26px); }
+  42%  { transform: scaleY(0.85) translate(-0.26px, 0.46px); }
+  57%  { transform: scaleY(0.85) translate(0.65px, -0.10px); }
+  71%  { transform: scaleY(0.85) translate(-0.46px, -0.37px); }
+  85%  { transform: scaleY(0.85) translate(0.18px, 0.26px); }
+  100% { transform: scaleY(0.85) translate(-0.37px, -0.18px); }
 }
 @keyframes armed-mid-max {
-  0%   { transform: scaleY(0.85) translate(-0.58px, 0.20px); }
-  14%  { transform: scaleY(0.85) translate(0.50px, -0.28px); }
-  28%  { transform: scaleY(0.85) translate(-0.28px, 0.50px); }
-  42%  { transform: scaleY(0.85) translate(0.70px, -0.10px); }
-  57%  { transform: scaleY(0.85) translate(-0.50px, -0.40px); }
-  71%  { transform: scaleY(0.85) translate(0.20px, 0.28px); }
-  85%  { transform: scaleY(0.85) translate(-0.40px, -0.20px); }
-  100% { transform: scaleY(0.85) translate(0.58px, 0.40px); }
+  0%   { transform: scaleY(0.85) translate(0, 0); }
+  14%  { transform: scaleY(0.85) translate(-0.58px, 0.20px); }
+  28%  { transform: scaleY(0.85) translate(0.50px, -0.28px); }
+  42%  { transform: scaleY(0.85) translate(-0.28px, 0.50px); }
+  57%  { transform: scaleY(0.85) translate(0.70px, -0.10px); }
+  71%  { transform: scaleY(0.85) translate(-0.50px, -0.40px); }
+  85%  { transform: scaleY(0.85) translate(0.20px, 0.28px); }
+  100% { transform: scaleY(0.85) translate(-0.40px, -0.20px); }
 }
 @keyframes armed-glow {
   0%, 100% { filter: drop-shadow(0 0 14px rgba(255, 200, 100, 0.32)) drop-shadow(0 4px 14px rgba(0, 0, 0, 0.5)); }

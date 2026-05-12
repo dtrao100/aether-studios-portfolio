@@ -49,15 +49,11 @@ export const servicenow: CaseStudy = {
   shortNarrative:
     "Built case-level + global notepads that live inside the Agent Workspace. Sensitive customer data stopped leaving the platform. Shipped to 8,000+ monthly agents across Starbucks, Spectrum, Disney, Jack in the Box, and Zillow.",
 
-  longNarrative: `Customer service agents handle live cases across phone, email, and queued requests. They constantly need to capture case-critical or sensitive information while actively working with a customer. ServiceNow's interface relied on rigid, structured fields. When information didn't fit predefined schemas, or was only temporarily relevant, agents had no appropriate place to record it.
+  longNarrative: `ServiceNow's interface relied on rigid, structured fields. When agent-captured information didn't fit predefined schemas, agents resorted to sticky notes and Notepad.exe. Sensitive customer data lived outside the platform.
 
-The result: physical sticky notes and local OS notepads. Sensitive customer data lived outside the platform, creating security, compliance, and workflow reliability risk. Agents were thinking on their feet during live calls with no good place to capture what mattered.
+The fix was a case-level notepad and a global agent-level notepad, both inside the workspace. Accessible without interrupting task flow, fully contained within the secure environment, with AI support for case summaries and knowledge base surfacing.
 
-The core idea was a notepad that lives inside the workspace, case-level notes tied to an active issue, and global agent-level notes that persist across cases. Both accessible without interrupting task flow, fully contained within the secure platform environment. Integrated AI support for case summaries, knowledge base surfacing, and suggested resolutions.
-
-Process: 15 user testing sessions over 3 months, with new prototypes every 3 days based on feedback, ~20 iterations total. Tested with agents at Starbucks, Spectrum, Disney, Jack in the Box, and Zillow before landing on the final design. I led this end-to-end as the only designer: the team lead stepped back early due to an org restructuring and the senior project lead had a family emergency, so I took over solo while onboarding new international PMs.
-
-Outcome: 100% adoption across agents who needed it, 8,000+ monthly agents across the enterprise client base. External notepad usage dropped to near-zero, the original problem of sensitive data living outside the platform was solved. Activation and ticket handling both improved.`,
+15 user testing sessions over 3 months, ~20 iterations, agents from Starbucks, Spectrum, Disney, Jack in the Box, and Zillow. I led this end-to-end as the only designer after the team lead stepped back early in the engagement.`,
 
   externalLink: {
     label: "View in Figma",
