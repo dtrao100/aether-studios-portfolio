@@ -108,10 +108,13 @@ export function WaveBackground() {
     let raf = 0;
     let bgUpdateCounter = 0;
 
-    // Optional ?wave-offset=N adds N seconds to uTime, letting you preview
-    // what the wave looks like at a different starting moment in its cycle.
+    // Default wave-cycle start point. Danny picked t≈15s (clearest braiding
+    // crossover) after A/B-ing 0s/5s/10s/15s/20s/25s. The wave continues
+    // animating naturally from this offset. Can be overridden with
+    // ?wave-offset=N for further preview.
+    const DEFAULT_TIME_OFFSET = 15;
     const offsetParam = new URLSearchParams(window.location.search).get("wave-offset");
-    const timeOffset = offsetParam ? Number(offsetParam) : 0;
+    const timeOffset = offsetParam ? Number(offsetParam) : DEFAULT_TIME_OFFSET;
 
     const initBg = computeBg(themeRef.current, 0);
     applyBgCss(initBg.center, initBg.edge);
