@@ -5,9 +5,9 @@ import { WaveVariantPicker } from "@/components/WaveVariantPicker";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Aether Studios | Danny Rao",
+  title: "Danyal Rao — Product Designer",
   description:
-    "Solo B2B product design consultancy specializing in compliance UX for regulated industries.",
+    "Product designer for B2B AI and insurance. Sole design lead at Complify (Conviction-backed) and SafetyWing (YC). Based in San Francisco.",
 };
 
 export default function RootLayout({
