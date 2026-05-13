@@ -176,6 +176,17 @@ function Connect() {
             </a>
             <span style={s.linkNote}>Roles, recommendations, connections</span>
           </li>
+          <li>
+            <a
+              href="/danyal-rao-resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={s.link}
+            >
+              Resume (PDF) ↗
+            </a>
+            <span style={s.linkNote}>One-page, current as of May 2026</span>
+          </li>
         </ul>
       </section>
     </>
