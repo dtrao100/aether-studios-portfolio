@@ -113,3 +113,45 @@
     text-shadow: 0 0 16px rgba(255, 255, 255, 0.55);
   }
 }
+
+/* ===== Mobile (≤768px) ============================================
+ * The fixed-left side rail doesn't survive a 375px viewport. Collapse to
+ * a top bar containing just the back link + category title. Sibling list
+ * hidden — users can navigate between case studies from the XMB home.
+ * This keeps the case-study reading experience full-width and legible.
+ */
+@media (max-width: 768px) {
+  .rail {
+    position: relative;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    padding: 18px 20px 14px;
+    flex-direction: row;
+    align-items: center;
+    gap: 18px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.4);
+  }
+  .back {
+    margin-bottom: 0;
+    font-size: 12px;
+  }
+  .categoryHead {
+    margin-bottom: 0;
+    flex: 1;
+    gap: 10px;
+  }
+  .categoryHead span {
+    font-size: 15px;
+    letter-spacing: 0.3px;
+  }
+  .categoryHead img {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  .items {
+    display: none;
+  }
+}

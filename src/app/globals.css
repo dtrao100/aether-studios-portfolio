@@ -14,6 +14,16 @@ html, body {
   overflow: hidden;
 }
 
+/* Mobile: let the document scroll naturally. Desktop locks the viewport
+ * because the XMB is a fixed-position interface; mobile case studies need
+ * to scroll the body. */
+@media (max-width: 768px) {
+  html, body {
+    height: auto;
+    overflow: auto;
+  }
+}
+
 /**
  * PS3 dashboard background. Pixel sampling of the reference video shows:
  *   - Top is DARKEST (deep navy #000D5C)

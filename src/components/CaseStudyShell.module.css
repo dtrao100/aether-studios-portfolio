@@ -425,3 +425,75 @@ a.collabName:hover {
 .footerLink:hover {
   color: white;
 }
+
+/* ===== Mobile (≤768px) ============================================
+ * Case study reading experience for phones. Stack everything full-width,
+ * shrink the desktop fonts, simplify the header to one column. Only fires
+ * inside this @media block, so desktop layout is untouched.
+ */
+@media (max-width: 768px) {
+  .layout {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+  }
+  .main {
+    position: relative;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: auto;
+    padding: 28px 20px 120px;
+    background: rgba(0, 0, 0, 0.55);
+    overflow-y: visible;
+  }
+  .content {
+    max-width: 100%;
+  }
+  .header {
+    margin-bottom: 36px;
+  }
+  .headerRow {
+    flex-direction: column;
+    margin-bottom: 24px;
+    gap: 12px;
+  }
+  .metaRight {
+    text-align: left;
+  }
+  .client { font-size: 14px; }
+  .metaSub { font-size: 13px; }
+  .role { font-size: 14px; }
+  .year { font-size: 13px; }
+  .tagline {
+    font-size: 22px;
+    letter-spacing: -0.2px;
+    line-height: 1.25;
+  }
+  .snippets { gap: 32px; margin-bottom: 36px; }
+  .snippet { gap: 10px; }
+  .caption { font-size: 13px; }
+  .stats {
+    gap: 22px;
+    margin: 0 0 36px;
+    padding: 20px 0;
+  }
+  .stat { flex: 1 1 45%; }
+  .statValue { font-size: 28px; margin-bottom: 4px; }
+  .statEmphasis .statValue { font-size: 32px; }
+  .statLabel { font-size: 11px; }
+  .shortNarrative {
+    font-size: 16px;
+    line-height: 1.55;
+    margin-bottom: 24px;
+  }
+  .readMore { margin-bottom: 36px; }
+  .readMoreBody { gap: 18px; }
+  .readMoreBody p { font-size: 14px; }
+  .longSection { gap: 8px; }
+  .longBody, .longBullets li { font-size: 14px; }
+  .footer { margin-top: 32px; padding-top: 24px; }
+  .collabRole { flex: 0 0 120px; }
+}
