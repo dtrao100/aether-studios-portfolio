@@ -167,7 +167,7 @@ function Connect() {
           </li>
           <li>
             <a
-              href="https://linkedin.com/in/danyalrao"
+              href="https://www.linkedin.com/in/danyal-rao/"
               target="_blank"
               rel="noopener noreferrer"
               style={s.link}
